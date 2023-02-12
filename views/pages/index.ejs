@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%- include ("../partials/header.ejs") %>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+    
+  <script type="text/javascript"> 
+   // --------------- --------------- --------------- --------------- ---------------
+
+        // Menu responsivo:
+        // let menu = document.querySelector('#icone-menu');
+        // let navbar = document.querySelector('.barra-de-navegacao');
+
+        // menu.onclick = () => {
+        //     menu.classList.toggle('fa-times');
+        //     navbar.classList.toggle('active');
+        // }
+
+        // window.onscroll = () => {
+        //     // Menu:
+        //     menu.classList.remove('fa-times');
+        //     navbar.classList.remove('active');
+
+        //     // Botão voltar ao topo:
+        //     scrollFunction();
+        // }
+   
+    // Inicialização do Firebase:
+    firebase.initializeApp( {
+        apiKey: "AIzaSyAigFQ85uceRSjqC7hBL1ZlftNxWf0wWxo",
+        authDomain: "multimedidor-tensao-corrente.firebaseapp.com",
+        databaseURL: "https://multimedidor-tensao-corrente-default-rtdb.firebaseio.com",
+        projectId: "multimedidor-tensao-corrente",
+        storageBucket: "multimedidor-tensao-corrente.appspot.com",
+        messagingSenderId: "942023989243",
+        appId: "1:942023989243:web:723fac40e3f41065605d5e"
+    });
+    var database = firebase.database();
+
+    function atualizarGrafico(value){
+        $( "#chart_div" ).load( "/profile?date="+value+"");
+    }
+
+    function atualizarGraficoMes(value){
+        $( "#chart_div" ).load( "/mes?date="+value+"");
+    }
+   function enviarCalculo(){
+
+        if($("#datainicio").val() == ''){
+            alert("Digita a data início, por favor")
+            $("#datainicio").focus()
+        } else  if($("#datafim").val() == ''){
+            alert("Digita a data fim, por favor")
+            $("#datafim").focus()
+        }  else  if($("#valor").val() == ''){
+            alert("Digita o valor, por favor")
+            $("#valor").focus()
+        }else{
+        
+            var url = "/medida?datainicio="+$("#datainicio").val()+"&datafim="+$("#datafim").val()+"&valor="+ (+$("#valor").val().replace('.', '').replace(',', '.').replace('R$', ''))+"";
+        
+            $( "#medida_data" ).load(url);
+        }
+       
+    }
+    var dia_atual =  new Date().toISOString();
+    $(document).ready(function () { 
+
+        $(function(){
+            $('#valor').maskMoney({prefix:'R$ ', allowNegative: true, thousands:'.', decimal:',', affixesStay: true});
+            // $('#datainicio').mask('99/99/9999');
+            // $('#datafim').mask('99/99/9999');
+        })
+
+        
+        var year =  new Date().toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , year: "numeric" });
+        var month = new Date().toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , month: "2-digit"});
+        var day =  new Date().toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , day: "2-digit"});
+
+        const data_atual = year+"-"+month+"-"+day;
+        //alert(data_atual )
+        $( "#chart_div" ).load( "/profile?date="+data_atual);
+
+        database.ref('VariaveisMedidas').on("value", function(snap) {
+
+        
+            today=new Date();
+            const h=today.getHours();
+            const m=today.getMinutes();
+            const s=today.getSeconds();
+        
+        
+            let horario = h+" : "+m+ " : "+s;
+            let string_horario = h+""+m;
+
+
+            console.log(horario);
+
+            const dadosString = snap.val().dados;
+            const dataSplit = dadosString.split("@");  
+           
+            if(dataSplit[0]){
+                conta =  dataSplit[0].split(":");  
+            }
+
+            if(dataSplit[1]){
+                voltagem =  dataSplit[1].split(":");  
+            }
+
+
+
+            if(dataSplit[2]){
+                corrente =  dataSplit[2].split(":");  
+            }
+
+            if(dataSplit[3]){
+                potencia =  dataSplit[3].split(":");  
+            }
+
+            if(dataSplit[4]){
+                energia =  dataSplit[4].split(":");  
+            }
+
+            if(dataSplit[5]){
+                frequencia =  dataSplit[5].split(":");  
+            }
+
+            if(dataSplit[6]){
+                fatordepotencia =  dataSplit[6].split(":");  
+            }
+
+        
+            if(dataSplit[7]){
+            ativo =  dataSplit[7].split(":");  
+        }
+
+            document.getElementById("corrente-in").innerHTML = corrente[1].replace('.', ',');
+            document.getElementById("potencia-in").innerHTML = potencia[1].replace('.', ',');
+            document.getElementById("energia-in").innerHTML = energia[1].replace('.', ',');
+            document.getElementById("frequencia-in").innerHTML = frequencia[1].replace('.', ',');
+            document.getElementById("fator-in").innerHTML = fatordepotencia[1].replace('.', ',');
+            document.getElementById("tensao-in").innerHTML = voltagem[1].replace('.', ',');
+
+            
+        });
+    });
+  
+  </script>
+
+
+
+</head>
+
+<body onload="">
+
+  <%- include ("../partials/nav.ejs") %>
+
+  <!-- Início -->
+  <section class="inicio" id="inicio">
+    <div class="texto-inicio">
+        <h1>Multimedidor de <span>Tensão</span> e <span>Corrente</span></h1>
+        <h2>Atualizações em tempo real</h2>
+        <p>Multimedidor é um equipamento eletrônico capaz de realizar diversas medições em um circuito elétrico. Um multimedidor possui a função de medições instantâneas e acumulativas.</p>
+    </div>
+    <div class="imagem-inicio">
+        <img src="/images/image-electrician.png" alt="Pessoa pensando envolta por gráficos e tecnologias.">
+    </div>
+</section>
+
+  <!-- Medições -->
+<section class="medicoes" id="medicoes">
+    <div class="subtitulo">
+        <h1>Medições</h1>
+    </div>
+    <div class="conteudo">
+        <div class="barras-de-medicoes">
+            <div class="texto-medicoes">
+                <p>Listadas abaixo as medições capturadas em tempo real.</p>
+            </div>
+            <div class="caixa-de-medicoes">
+                <i class="fa fa-bolt"><h3>Tensão</h3></i>
+                <div>
+                    <span id="tensao-in">0,0</span> V
+                </div>
+                <div class="porcentagem-barra barra-potencia"></div>
+            </div>
+          
+            <div class="caixa-de-medicoes">
+                <i class="fa fa-bolt"><h3>Corrente</h3></i>
+                <div>
+                    <span id="corrente-in">0,0</span> A
+                </div>
+                <div class="porcentagem-barra barra-corrente"></div>
+            </div>
+            <div class="caixa-de-medicoes">
+                <i class="fa fa-bolt"><h3>Potência</h3></i>
+                <div>
+                    <span id="potencia-in">0,0</span> W
+                </div>
+                <div class="porcentagem-barra barra-potencia"></div>
+            </div>
+            <div class="caixa-de-medicoes">
+                <i class="fa fa-bolt"><h3>Energia</h3></i>
+                <div>
+                    <span id="energia-in">0,0</span> kWh
+                </div>
+                <div class="porcentagem-barra barra-energia"></div>
+            </div>
+            <div class="caixa-de-medicoes">
+                <i class="fa fa-bolt"><h3>Frequência</h3></i>
+                <div>
+                    <span id="frequencia-in">0,0</span> Hz
+                </div>
+                <div class="porcentagem-barra barra-frequencia"></div>
+            </div>
+            <div class="caixa-de-medicoes">
+                <i class="fa fa-bolt"><h3>Fator de Potência</h3></i>
+                <div>
+                    <span id="fator-in">0,0</span> kVAr
+                </div>
+                <div class="porcentagem-barra barra-fator-de-potencia"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="grafico" id="grafico">
+    <div class="subtitulo">
+        <h1>Gráficos</h1>
+    </div>
+   
+    <div class="conteudo">
+       <div class="barras-de-medicoes-na">
+        <div>
+            <span>
+                Data :
+            </span>
+
+            <select name="dia" onchange="javascript:atualizarGrafico(this.value)" >
+           
+                <% for (var i =0; i < data_current.length;  i++ ) { %>
+                    <option value=<%= data_current[i].datas.toISOString() %>   <%= data_current[i].datas.toISOString()  === data_current[i].hoje.toISOString()  ? 'selected' : '' %> >
+                        <%= data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , day: "2-digit"}) +"/"+data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , month: "2-digit"})+"/"+data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , year: "numeric" })%>
+                    </option>
+                <% } %>
+            </select>
+
+            <span>
+                Mês : &nbsp;
+            </span>
+            <select name="dia" onchange="javascript:atualizarGraficoMes(this.value)" >
+                <option value='-1'   >
+                   Selecione
+                </option>
+                <% for (var i =0; i <= mesa.length;  i++ ) { %>,
+                    <option value=<%= i %>   >
+                        <%= mesa[i]%>
+                    </option>
+                <% } %>
+            </select>
+            
+        </div>
+
+        <div id="chart_div" style="width: 100%; height: 400px;"></div>
+       </div>
+       
+    </div>
+</section>
+
+
+<section class="atual" class="consumo" id="consumo">
+    <div class="subtitulo">
+        <h1>Consumo</h1>
+    </div>
+   
+    <div class="conteudo">
+
+    <div class="barras-de-medicoes-na">
+        <div>
+            <br> 
+            <p style="font-size: var(--tamanho-p);margin: 1rem 0;">Calcular consumo R$</p>
+            <br>
+            <div style="display: flex;">
+            
+                <span style="width:100px;">
+                    Data início:&nbsp;
+                </span>
+                <input type="date" id="datainicio"  style='width: 120px;' name="valor">
+            </div>
+            <br>
+            <div style="display: flex;">
+                <span  style="width:100px;">
+                    Data fim:&nbsp;
+                </span>
+                <input type="date" id="datafim"  style='width: 120px;' name="valor">
+            </div>
+            <br>
+            <div style="display: flex;">
+                <span  style="width:100px;">
+                    Valor:&nbsp;
+                </span>
+                <input type="text" id="valor"  style='width: 120px;' name="valor">
+            </div>
+
+            <div >
+                <br>
+                <input  onclick="enviarCalculo()" style="width:220px; background-color:var(--cor-primaria); color: white;" type="button" value="Calcular">
+            </div>
+            <div id="medida_data">
+                <div >
+                
+                        <div class="caixa-de-medicoes">
+                        <i class="fa fa-bolt"><h3></h3></i>
+                        <div>
+                            <span id="potencia-in-media">00</span> 
+                        </div>
+                        <div class="porcentagem-barra barra-potencia"></div>
+                    </div>
+            
+                    <div >
+                        
+                        <div class="caixa-de-medicoes">
+                        <i class="fa fa-money"><h3></h3></i>
+                        <div>
+                            <span id="potencia-in-media">00</span> 
+                        </div>
+                        <div class="porcentagem-barra barra-potencia"></div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+       </div>
+       <div>
+            <div class="">
+                <div class="texto-medicoes">
+                    <p>Listados abaixo as medições armazenadas ao longo do
+                        tempo.</p>
+                </div>
+            
+                <div class="caixa-de-medicoes">
+                    <i class="fa fa-bolt"><h3>Hoje</h3></i>
+                    <div>
+                        <span id="corrente-in"><%=data_hoje[0].hoje.replace('.', ',');%> kWh</span> 
+                    </div>
+                    <div class="porcentagem-barra barra-corrente"></div>
+                </div>
+                <div class="caixa-de-medicoes">
+                    <i class="fa fa-bolt"><h3>Mês</h3></i>
+                    <div>
+                        <span id="potencia-in"><%=data_mes[0].mes.replace('.', ',');%> kWh</span> 
+                    </div>
+                    <div class="porcentagem-barra barra-potencia"></div>
+                </div>
+            
+                <div class="caixa-de-medicoes">
+                    <i class="fa fa-bolt"><h3>Total</h3></i>
+                    <div>
+                        <span id="fator-in"><%=data_final[0].tudo.replace('.', ',');%> kWh</span> 
+                    </div>
+                    <div class="porcentagem-barra barra-fator-de-potencia"></div>
+                </div>
+            </div>
+       </div>
+ 
+    </div>
+</section>
+
+ <!-- Direitos Autorais -->
+ <div class="direitos-autorais">
+  <p>&#169; Instituto Federal de Goiás</p>
+</div>
+
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/c1a3e9b7cb.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
+

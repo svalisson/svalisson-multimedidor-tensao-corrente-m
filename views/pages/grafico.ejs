@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    var rows = <%-JSON.stringify(dado)%>
+
+    if(rows.length > 0){
+    google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+    google.charts.setOnLoadCallback(drawChart);
+
+    /*asd */
+
+
+      var datad =[];
+      var Headerd= [ 'Horário',  'kWh'];
+      datad.push(Headerd);
+      for (var i = 0; i < rows.length; i++) {
+          var temp=[];
+        
+          
+          temp.push( rows[i].horario );
+          if(i === 0){
+            temp.push(0);
+          }else{
+            temp.push( (+rows[i].energia) - (+rows[i-1].energia) );
+          }
+          console.log(temp)
+          datad.push(temp);
+      }
+    
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable(
+        datad
+        
+        );
+
+        var options = {
+          title: 'Consumo Diário',
+          hAxis: {title: 'Horário',  titleTextStyle: {color: '#333'}},
+          vAxis: {minValue: 0, },
+          responsive: true,
+        };
+        var formatter = new google.visualization.NumberFormat({
+          decimalSymbol: ',', groupingSymbol: '.' 
+        });
+
+        formatter.format(data, 1);
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    }
+   
+  </script>
+
+
+</head>
+
+<body>
+    <div id="chart_div" style="width: 1000px; height: 500px;"></div>
+</body>
+</html>
