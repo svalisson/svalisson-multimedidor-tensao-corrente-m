@@ -16,7 +16,7 @@
 
 
       var datad =[];
-      var Headerd= [ 'Horário',  'kWh'];
+      var Headerd= [ 'Horário',  'Potencia'];
       datad.push(Headerd);
       for (var i = 0; i < rows.length; i++) {
           var temp=[];
@@ -26,7 +26,7 @@
           if(i === 0){
             temp.push(0);
           }else{
-            temp.push( (+rows[i].energia) - (+rows[i-1].energia) );
+            temp.push(rows[i].potencia);
           }
           console.log(temp)
           datad.push(temp);
