@@ -118,8 +118,11 @@ if(res?.rowCount > 0){
  const timeDiff = Math.abs(date2.getTime() - date1.getTime());
  diffDays = (ativo[1] == 1) ? Math.ceil(timeDiff / (1000 )) : 0; 
  
-  const sql =`insert into medida (descricao,tensao,conta,corrente,fatordepotencia,frequencia,potencia,energia,intervalo) 
-  values ('teste',${voltagem[1]},${conta[1]},${corrente[1]},${fatordepotencia[1]},${frequencia[1]},${potencia[1]},${energia[1]},${diffDays})`
+ const sql =`insert into medida (descricao,tensao,conta,corrente,fatordepotencia,frequencia,potencia,energia,intervalo) 
+ values ('multi', ${voltagem[1] != ' nan' ? voltagem[1] :'0'}, ${conta[1]  != 'nan' ? conta[1] : '0'}
+ ,${corrente[1] != 'nan' ? corrente[1] :'0'}, ${fatordepotencia[1] != 'nan' ? fatordepotencia[1] :'0'}, ${frequencia[1]  != 'nan' ? frequencia[1] : '0'}
+ ,${potencia[1]  != 'nan' ? potencia[1] : '0'}, ${energia[1]  != 'nan' ? energia[1] : '0'}, ${diffDays})`
+ 
   
   client.query(sql, (err, res) => {
   console.log(err)
