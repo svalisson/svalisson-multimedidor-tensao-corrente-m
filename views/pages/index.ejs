@@ -61,22 +61,26 @@
 	  }
 	
 	window.onload = function() {
+	  console.log('onload')
 	  var valorControle = document.getElementById('valorControle');
 	  var emailControle = document.getElementById('emailControle');
 	  var phoneControle = document.getElementById('phoneControle');
 
 	  kwhRef.once('value').then(function(snapshot) {
 		var valor = snapshot.val();
+		console.log(valor);
 		valorControle.value = valor;
 	  });
 
 	  emailControleRef.once('value').then(function(snapshot) {
 		var valor = snapshot.val();
+		console.log(valor);
 		emailControle.value = valor;
 	  });
 
 	  phoneControleRef.once('value').then(function(snapshot) {
 		var valor = snapshot.val();
+		console.log(valor);
 		phoneControle.value = valor;
 	  });
 	};
