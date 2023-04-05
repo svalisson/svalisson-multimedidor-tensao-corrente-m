@@ -43,6 +43,34 @@
 	var emailControleRef = database.ref('controle/email');
 	var phoneControleRef = database.ref('controle/telefone');
 	
+	// Função para atualizar os valores dos campos de controle
+	function attValoresControle() {
+		// Busca o valor da variável kwh no banco de dados do Firebase
+		kwhRef.once('value').then(function(snapshot) {
+		  var valorKwh = snapshot.val();
+		  console.log('Valor de kwh:', valorKwh);
+		  // atualize o campo de entrada com o valor obtido
+		  document.getElementById('controlevalorKwh').value = valorKwh;
+		});
+
+		// Busca o valor da variável email no banco de dados do Firebase
+		emailControleRef.once('value').then(function(snapshot) {
+		  var valorEmail = snapshot.val();
+		  console.log('Valor de email:', valorEmail);
+		  // atualize o campo de entrada com o valor obtido
+		  document.getElementById('emailControle').value = valorEmail;
+		});
+
+		// Busca o valor da variável telefone no banco de dados do Firebase
+		phoneControleRef.once('value').then(function(snapshot) {
+		  var valorTelefone = snapshot.val();
+		  console.log('Valor de telefone:', valorTelefone);
+		  // atualize o campo de entrada com o valor obtido
+		  document.getElementById('phoneControle').value = valorTelefone;
+		});
+	  }
+	
+	
 	// Função para enviar o valor para o Firebase
 	function enviarValorControle() {
 		var valorControle = document.getElementById('controlevalorKwh').value;
@@ -59,32 +87,6 @@
 		  alert("Alerta configurado em " + valor + "Kwh");
 		}
 	  }
-	
-	window.onload = function() {
-	  console.log('onload')
-	  var valorControle = document.getElementById('valorControle');
-	  var emailControle = document.getElementById('emailControle');
-	  var phoneControle = document.getElementById('phoneControle');
-
-	  kwhRef.once('value').then(function(snapshot) {
-		var valor = snapshot.val();
-		console.log(valor);
-		valorControle.value = valor;
-	  });
-
-	  emailControleRef.once('value').then(function(snapshot) {
-		var valor = snapshot.val();
-		console.log(valor);
-		emailControle.value = valor;
-	  });
-
-	  phoneControleRef.once('value').then(function(snapshot) {
-		var valor = snapshot.val();
-		console.log(valor);
-		phoneControle.value = valor;
-	  });
-	};
-
 	
 	  
     function atualizarGrafico(value){
@@ -190,7 +192,6 @@
             document.getElementById("frequencia-in").innerHTML = frequencia[1].replace('.', ',');
             document.getElementById("fator-in").innerHTML = fatordepotencia[1].replace('.', ',');
             document.getElementById("tensao-in").innerHTML = voltagem[1].replace('.', ',');
-
             
         });
     });
@@ -201,7 +202,7 @@
 
 </head>
 
-<body onload="">
+<body onload="attValoresControle()">
 
   <%- include ("../partials/nav.ejs") %>
 
@@ -273,11 +274,6 @@
         </div>
     </div>
 </section>
-
-
-'emailControle').value;
-		var phoneControle = document.getElementById('phoneControle'
-		
 		
 <section class="controle" id="controle">
     <div class="subtitulo">
