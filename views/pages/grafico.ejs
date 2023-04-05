@@ -35,7 +35,7 @@ function drawChartQualidade() {
       var temp = [];
       temp.push(rows[i].horario);
       if (i === 0) {
-        //temp.push(0);
+        temp.push(0);
       } else {
         temp.push(rows[i].tensao);
       }
@@ -48,7 +48,7 @@ function drawChartQualidade() {
   var options = {
     title: 'Qualidade da energia',
     hAxis: {title: 'Horário',  titleTextStyle: {color: '#333'}},
-    vAxis: {minValue: 0},
+    vAxis: {minValue: 50},
     responsive: true,
   };
   var formatter = new google.visualization.NumberFormat({
