@@ -6,6 +6,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script type="text/javascript">
 
+  var tipoGrafico = document.querySelector('input[name="tipo_grafico"]:checked').value;
+  
+  // Use a variável tipoGrafico para decidir qual gráfico gerar
+  if (tipoGrafico === 'consumo') {
+    alert("Grafico de consumo");
+  } else if (tipoGrafico === 'qualidade') {
+    alert("Grafico de qualidade");
+  }
+
+
 var rows = <%-JSON.stringify(dado)%>;
 
 google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
