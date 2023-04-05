@@ -444,7 +444,7 @@ app.get('/mes', async (req, res, next) => {
   //console.log(dateCurrent)
   const client = await connectarClient(config)
   const sql = ` 
-  select total.horario , string_agg(energia, '@'  ORDER BY cast(energia as numeric) DESC) as potencia
+  select total.horario , string_agg(energia, '@'  ORDER BY cast(energia as numeric) DESC) as potencia , tensao
     from (
     
       
