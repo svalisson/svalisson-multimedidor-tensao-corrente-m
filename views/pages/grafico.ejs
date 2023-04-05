@@ -6,22 +6,63 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script type="text/javascript">
 
-  var tipoGrafico = document.querySelector('input[name="tipo_grafico"]:checked').value;
-  
-  // Use a variável tipoGrafico para decidir qual gráfico gerar
-  if (tipoGrafico === 'consumo') {
-    alert("Grafico de consumo");
-  } else if (tipoGrafico === 'qualidade') {
-    alert("Grafico de qualidade");
-  }
 
 
 var rows = <%-JSON.stringify(dado)%>;
+var tipoGrafico = document.querySelector('input[name="tipo_grafico"]:checked').value;
+  
+// Use a variável tipoGrafico para decidir qual gráfico gerar
+if (tipoGrafico === 'consumo') {
+	google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+	google.charts.setOnLoadCallback(drawChartConsumo);
+} else if (tipoGrafico === 'qualidade') {
+	google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+	google.charts.setOnLoadCallback(drawChartQualidade);
+}
 
-google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
-google.charts.setOnLoadCallback(drawChart);
+function drawChartQualidade() {
+  var datad = [];
+  var Headerd = ['Horário', 'Tensão'];
+  
+  // Se rows.length for igual a zero, crie uma tabela vazia
+  if (rows.length === 0) {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Horário');
+    data.addColumn('number', 'Tensão');
+  } else {
+    // Preencha os dados na tabela
+    datad.push(Headerd);
+    for (var i = 0; i < rows.length; i++) {
+      var temp = [];
+      temp.push(rows[i].horario);
+      if (i === 0) {
+        temp.push(0);
+      } else {
+        temp.push(rows[i].tensao);
+      }
+      datad.push(temp);
+    }
+    var data = google.visualization.arrayToDataTable(datad);
+  }
+  
+  // Crie o gráfico com a tabela de dados
+  var options = {
+    title: 'Qualidade da energia',
+    hAxis: {title: 'Horário',  titleTextStyle: {color: '#333'}},
+    vAxis: {minValue: 0},
+    responsive: true,
+  };
+  var formatter = new google.visualization.NumberFormat({
+    decimalSymbol: ',', groupingSymbol: '.' 
+  });
 
-function drawChart() {
+  formatter.format(data, 1);
+
+  var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+}
+
+function drawChartConsumo() {
   var datad = [];
   var Headerd = ['Horário', 'Potência'];
   

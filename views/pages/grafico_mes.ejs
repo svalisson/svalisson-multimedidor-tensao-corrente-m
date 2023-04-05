@@ -8,10 +8,18 @@
 
 var rows = <%-JSON.stringify(dado)%>;
 
-google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
-google.charts.setOnLoadCallback(drawChart);
+var tipoGrafico = document.querySelector('input[name="tipo_grafico"]:checked').value;
+  
+// Use a variável tipoGrafico para decidir qual gráfico gerar
+if (tipoGrafico === 'consumo') {
+	google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+	google.charts.setOnLoadCallback(drawChartConsumo);
+} else if (tipoGrafico === 'qualidade') {
+	alert("Grafico de qualidade");
+}
 
-function drawChart() {
+
+function drawChartConsumo() {
   var datad = [];
   var Headerd = ['Dia', 'kWh'];
   
