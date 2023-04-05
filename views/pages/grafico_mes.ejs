@@ -6,56 +6,49 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script type="text/javascript">
 
-    var rows = <%-JSON.stringify(dado)%>
-	
+var rows = <%-JSON.stringify(dado)%>;
 
-    if(rows.length > 0){
-    google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
-    google.charts.setOnLoadCallback(drawChart);
+google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+google.charts.setOnLoadCallback(drawChart);
 
-    /*asd */
+function drawChart() {
+  var datad = [];
+  var Headerd = ['Dia', 'kWh'];
+  
+  // Se rows.length for igual a zero, crie uma tabela vazia
+  if (rows.length === 0) {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Dia');
+    data.addColumn('number', 'kWh');
+  } else {
+    // Preencha os dados na tabela
+    datad.push(Headerd);
+    for (var i = 0; i < rows.length; i++) {
+      var temp = [];
+      var pont = rows[i].potencia.split("@");
+      temp.push(rows[i].horario);
+      temp.push((+pont[0]) - (+pont[1]));
+      datad.push(temp);
+    }
+    var data = google.visualization.arrayToDataTable(datad);
+  }
+  
+  // Crie o gráfico com a tabela de dados
+  var options = {
+    title: 'Consumo Mensal',
+    hAxis: {title: 'Dia',  titleTextStyle: {color: '#333'}},
+    vAxis: {minValue: 100},
+    responsive: true,
+  };
+  var formatter = new google.visualization.NumberFormat({
+    decimalSymbol: ',', groupingSymbol: '.' 
+  });
 
+  formatter.format(data, 1);
 
-    var datad =[];
-      var Headerd= [ 'Dia',  'kWh'];
-      datad.push(Headerd);
-      for (var i = 0; i < rows.length; i++) {
-          var temp=[];
-
-          var pont = rows[i].potencia.split("@")
-        
-          temp.push( rows[i].horario );
-          temp.push( (+pont[0]) - (+pont[1])  );
-
-          datad.push(temp);
-      }
-    
-
-      function drawChart() {
-
-        var data = google.visualization.arrayToDataTable(
-        datad
-        
-        );
-
-        var options = {
-          title: 'Consumo Mensal',
-          hAxis: {title: 'Dia',  titleTextStyle: {color: '#333'}},
-          vAxis: {minValue: 100},
-          responsive: true,
-        };
-        var formatter = new google.visualization.NumberFormat({
-          decimalSymbol: ',', groupingSymbol: '.' 
-        });
-
-        formatter.format(data, 1);
-
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    }else{
-		alert("Não há dados de medição para esse periodo para popular o grafico com essas configurações");
-	}
+  var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+}
    
   </script>
 
