@@ -60,11 +60,11 @@
 		}
 	  }
 	
-	var valorControle = document.getElementById('controlevalorKwh').value;
-	var emailControle = document.getElementById('emailControle').value;
-	var phoneControle = document.getElementById('phoneControle').value;
-
 	window.onload = function() {
+	  var valorControle = document.getElementById('valorControle');
+	  var emailControle = document.getElementById('emailControle');
+	  var phoneControle = document.getElementById('phoneControle');
+
 	  kwhRef.once('value').then(function(snapshot) {
 		var valor = snapshot.val();
 		valorControle.value = valor;
@@ -80,6 +80,8 @@
 		phoneControle.value = valor;
 	  });
 	};
+
+	
 	  
     function atualizarGrafico(value){
         $( "#chart_div" ).load( "/profile?date="+value+"");
