@@ -38,7 +38,7 @@ function drawChartQualidade() {
       if (i === 0) {
         temp.push(0);
       } else {
-        temp.push(rows[i].tensao);
+        temp.push(rows[i].voltagem);
       }
       datad.push(temp);
     }
@@ -80,7 +80,7 @@ function drawChartConsumo() {
       if (i === 0) {
         temp.push(0);
       } else {
-        temp.push(rows[i].voltagem);
+        temp.push(rows[i].potencia);
       }
       datad.push(temp);
     }
