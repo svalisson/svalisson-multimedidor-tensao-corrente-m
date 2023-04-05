@@ -22,7 +22,7 @@ if (tipoGrafico === 'consumo') {
 function drawChartQualidade() {
   var datad = [];
   var Headerd = ['Dia', 'Tensão Media'];
-  
+   console.log(rows)
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
     var data = new google.visualization.DataTable();
