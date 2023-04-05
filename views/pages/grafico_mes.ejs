@@ -15,7 +15,47 @@ if (tipoGrafico === 'consumo') {
 	google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
 	google.charts.setOnLoadCallback(drawChartConsumo);
 } else if (tipoGrafico === 'qualidade') {
-	alert("Grafico de qualidade");
+	google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+	google.charts.setOnLoadCallback(drawChartQualidade);
+}
+
+function drawChartQualidade() {
+  var datad = [];
+  var Headerd = ['Dia', 'Tensão Media'];
+  
+  // Se rows.length for igual a zero, crie uma tabela vazia
+  if (rows.length === 0) {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Dia');
+    data.addColumn('number', 'Tensão Media');
+  } else {
+    // Preencha os dados na tabela
+    datad.push(Headerd);
+    for (var i = 0; i < rows.length; i++) {
+      var temp = [];
+      var ten = rows[i].tensao.split("@");
+      temp.push(rows[i].horario);
+      temp.push((+ten[0]) - (+ten[1]));
+      datad.push(temp);
+    }
+    var data = google.visualization.arrayToDataTable(datad);
+  }
+  
+  // Crie o gráfico com a tabela de dados
+  var options = {
+    title: 'Qualidade da energia',
+    hAxis: {title: 'Dia',  titleTextStyle: {color: '#333'}},
+    vAxis: {minValue: 100},
+    responsive: true,
+  };
+  var formatter = new google.visualization.NumberFormat({
+    decimalSymbol: ',', groupingSymbol: '.' 
+  });
+
+  formatter.format(data, 1);
+
+  var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
 }
 
 

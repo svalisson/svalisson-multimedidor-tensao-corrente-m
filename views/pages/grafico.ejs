@@ -10,7 +10,6 @@
 
 var rows = <%-JSON.stringify(dado)%>;
 var tipoGrafico = document.querySelector('input[name="tipo_grafico"]:checked').value;
-console.log(rows)  
 // Use a variável tipoGrafico para decidir qual gráfico gerar
 if (tipoGrafico === 'consumo') {
 	google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
@@ -36,7 +35,7 @@ function drawChartQualidade() {
       var temp = [];
       temp.push(rows[i].horario);
       if (i === 0) {
-        temp.push(0);
+        //temp.push(0);
       } else {
         temp.push(rows[i].tensao);
       }
