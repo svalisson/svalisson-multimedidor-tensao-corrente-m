@@ -53,7 +53,9 @@
         var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
-    }
+    }else{
+		alert("Não há dados de medição para esse periodo para popular o grafico com essas configurações");
+	}
    
   </script>
 

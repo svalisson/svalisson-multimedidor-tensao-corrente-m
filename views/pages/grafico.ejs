@@ -6,58 +6,53 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script type="text/javascript">
 
-    var rows = <%-JSON.stringify(dado)%>
-	
+var rows = <%-JSON.stringify(dado)%>;
 
-    if(rows.length > 0){
-    google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
-    google.charts.setOnLoadCallback(drawChart);
+google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+google.charts.setOnLoadCallback(drawChart);
 
-    /*asd */
-
-
-      var datad =[];
-      var Headerd= [ 'Horário',  'Potência'];
-      datad.push(Headerd);
-      for (var i = 0; i < rows.length; i++) {
-          var temp=[];
-        
-          
-          temp.push( rows[i].horario );
-          if(i === 0){
-            temp.push(0);
-          }else{
-            temp.push(rows[i].potencia);
-          }
-          console.log(temp)
-          datad.push(temp);
+function drawChart() {
+  var datad = [];
+  var Headerd = ['Horário', 'Potência'];
+  
+  // Se rows.length for igual a zero, crie uma tabela vazia
+  if (rows.length === 0) {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Horário');
+    data.addColumn('number', 'Potência');
+  } else {
+    // Preencha os dados na tabela
+    datad.push(Headerd);
+    for (var i = 0; i < rows.length; i++) {
+      var temp = [];
+      temp.push(rows[i].horario);
+      if (i === 0) {
+        temp.push(0);
+      } else {
+        temp.push(rows[i].potencia);
       }
-    
-
-      function drawChart() {
-
-        var data = google.visualization.arrayToDataTable(
-        datad
-        
-        );
-
-        var options = {
-          title: 'Consumo Diário',
-          hAxis: {title: 'Horário',  titleTextStyle: {color: '#333'}},
-          vAxis: {minValue: 0, },
-          responsive: true,
-        };
-        var formatter = new google.visualization.NumberFormat({
-          decimalSymbol: ',', groupingSymbol: '.' 
-        });
-
-        formatter.format(data, 1);
-
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
+      datad.push(temp);
     }
-   
+    var data = google.visualization.arrayToDataTable(datad);
+  }
+  
+  // Crie o gráfico com a tabela de dados
+  var options = {
+    title: 'Consumo Diário',
+    hAxis: {title: 'Horário',  titleTextStyle: {color: '#333'}},
+    vAxis: {minValue: 0},
+    responsive: true,
+  };
+  var formatter = new google.visualization.NumberFormat({
+    decimalSymbol: ',', groupingSymbol: '.' 
+  });
+
+  formatter.format(data, 1);
+
+  var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+}
+
   </script>
 
 
