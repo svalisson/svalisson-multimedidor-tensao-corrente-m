@@ -64,22 +64,22 @@
 	var emailControle = document.getElementById('emailControle').value;
 	var phoneControle = document.getElementById('phoneControle').value;
 
-      // Quando a página carregar, preencha o campo de entrada com o valor do Firebase
-     window.onload = function() {
-        kwhRef.once('value').then(function(snapshot) {
-        var valor = snapshot.val();
-        valorControle.value = valor;
-		
-		emailControleRef.once('value').then(function(snapshot) {
-        var valor = snapshot.val();
-        emailControle.value = valor;
-		
-		phoneControleRef.once('value').then(function(snapshot) {
-        var valor = snapshot.val();
-        phoneControle.value = valor;
-		
-        });
-      };
+	window.onload = function() {
+	  kwhRef.once('value').then(function(snapshot) {
+		var valor = snapshot.val();
+		valorControle.value = valor;
+	  });
+
+	  emailControleRef.once('value').then(function(snapshot) {
+		var valor = snapshot.val();
+		emailControle.value = valor;
+	  });
+
+	  phoneControleRef.once('value').then(function(snapshot) {
+		var valor = snapshot.val();
+		phoneControle.value = valor;
+	  });
+	};
 	  
     function atualizarGrafico(value){
         $( "#chart_div" ).load( "/profile?date="+value+"");
