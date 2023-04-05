@@ -10,7 +10,7 @@
 
 var rows = <%-JSON.stringify(dado)%>;
 var tipoGrafico = document.querySelector('input[name="tipo_grafico"]:checked').value;
-  
+console.log(rows)  
 // Use a variável tipoGrafico para decidir qual gráfico gerar
 if (tipoGrafico === 'consumo') {
 	google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
