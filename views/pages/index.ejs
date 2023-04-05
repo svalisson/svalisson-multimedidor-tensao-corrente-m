@@ -39,7 +39,18 @@
         appId: "1:942023989243:web:723fac40e3f41065605d5e"
     });
     var database = firebase.database();
-
+	var kwhRef = database.ref('controle/kwh');
+	
+	// Função para enviar o valor para o Firebase
+	function enviarValorControle() {
+		var valor = document.getElementById('valor').value;
+		if (isNaN(valor)) {
+		  alert('O valor informado para o alerta de consumo não é válido');
+		} else {
+		  kwhRef.set(parseFloat(valor));
+		}
+	  }
+	  
     function atualizarGrafico(value){
         $( "#chart_div" ).load( "/profile?date="+value+"");
     }
@@ -224,6 +235,23 @@
                 <div class="porcentagem-barra barra-fator-de-potencia"></div>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="controle" id="controle">
+    <div class="subtitulo">
+        <h1>Alerta de consumo </h1>
+    </div>
+    <div class="conteudo">
+		<p style="font-size: var(--tamanho-p);margin: 1rem 0;">Configurar alerta de consumo mensal, ao chegar no valor estabelecido um alerta é enviado.</p>
+		
+		<div style="display: flex;">
+                <span style="width:100px;">Valor Kwh:&nbsp;</span>
+				<input type="text" id="controle" style="width: 120px;" name="controle">
+        </div>
+		
+		<input onclick="enviarValorControle()" style="width:220px; background-color:var(--cor-primaria); color: white;" type="button" value="Configurar controle">
+		
     </div>
 </section>
 
