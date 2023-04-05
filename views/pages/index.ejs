@@ -261,23 +261,25 @@
 		<div style="display: flex; flex-direction: column;">
 			<p style="font-size: var(--tamanho-p);margin: 1rem 0;">Configurar alerta de consumo mensal, ao chegar no valor estabelecido um alerta é enviado.</p>
 
-		  <div>
+		  <div style="display: flex">
 			<span style="width:100px;">Consumo mensal kWh:&nbsp;</span>
 			<input type="text" id="controle" style="width: 120px;" name="controle">
 		  </div>
 		  
-		  <div>
+		  <div style="display: flex">
 			<span style="width:100px;">Email:&nbsp;</span>
-			<input type="email" id="emailControle" style="width: 120px;" name="emailControle">
+			<input type="email" id="emailControle" style="width: 200px;" name="emailControle">
 		  </div>
 		  
-		  <div>
+		  <div style="display: flex">
 			<span style="width:100px;">Telefone:&nbsp;</span>
-			<input type="tel" id="phoneControle" style="width: 120px;" name="phoneControle">
+			<input type="tel" id="phoneControle" style="width: 150px;" name="phoneControle">
 		  </div>
 		  
-		  <input onclick="enviarValorControle()" style="width:220px; background-color:var(--cor-primaria); color: white;" type="button" value="Configurar controle">
-
+		  <div style="display: flex">
+			<input onclick="enviarValorControle()" style="width:220px; background-color:var(--cor-primaria); color: white;" type="button" value="Configurar controle">
+		  </div>
+		  
 		</div>
 
 		
