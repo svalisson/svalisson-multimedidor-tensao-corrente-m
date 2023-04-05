@@ -286,7 +286,7 @@ app.get('/profile', async (req, res, next) => {
   const client = await connectarClient(config)
   const sql = `
   select * from (                  
-    select to_char(created_at ,'HH24:MI') as horario,potencia,  energia,intervalo,
+    select to_char(created_at ,'HH24:MI') as horario,potencia,  energia,intervalo, tensao,
     
       ROW_NUMBER () OVER (
                         PARTITION BY (to_char(created_at ,'HH24MI'))	
@@ -449,7 +449,7 @@ app.get('/mes', async (req, res, next) => {
     
       
     select * from (                  
-        select to_char(created_at ,'dd') as horario,potencia, intervalo, energia,
+        select to_char(created_at ,'dd') as horario,potencia, intervalo, energia, tensao,
         
           ROW_NUMBER () OVER (
                             PARTITION BY (to_char(created_at ,'dd'))	
@@ -502,7 +502,7 @@ app.get('/mes', async (req, res, next) => {
         where lista.best = 1
       union all
       select * from (  
-        select to_char(created_at ,'dd') as horario,potencia, intervalo, energia,
+        select to_char(created_at ,'dd') as horario,potencia, intervalo, energia, tensao,
         
           ROW_NUMBER () OVER (
                             PARTITION BY (to_char(created_at ,'dd'))	
