@@ -21,7 +21,7 @@ if (tipoGrafico === 'consumo') {
 
 function drawChartQualidade() {
   var datad = [];
-  var Headerd = ['Horário', 'Tensão minima', 'Tensão maxima','Tensão'];
+  var Headerd = ['Horário', 'Tensão', 'Tensão minima', 'Tensão maxima'];
   console.log(rows)
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
@@ -35,14 +35,16 @@ function drawChartQualidade() {
       var temp = [];
     
 	  temp.push(rows[i].horario);
-	  temp.push(201); // Adicionar valor para linha Y=201
-	  temp.push(231); // Adicionar valor para linha Y=231
 		
 	  if (i === 0) {
         temp.push(220);
       }else{
         temp.push(rows[i].tensao);
 	  }
+	  
+	  temp.push(201); // Adicionar valor para linha Y=201
+	  temp.push(231); // Adicionar valor para linha Y=231
+	  
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);
@@ -67,6 +69,12 @@ function drawChartQualidade() {
         color: 'orange',
         lineWidth: 1,
         lineDashStyle: [5, 5], // Estilo de linha tracejada
+        visibleInLegend: true
+      },
+	  3: {
+        type: 'line',
+        color: 'blue',
+        lineWidth: 2,
         visibleInLegend: true
       }
     }
