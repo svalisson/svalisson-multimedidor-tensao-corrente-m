@@ -21,8 +21,8 @@ if (tipoGrafico === 'consumo') {
 
 function drawChartQualidade() {
   var datad = [];
-  var Headerd = ['Horário', 'Tensão'];
-  
+  var Headerd = ['Horário', 'Tensão', 'Tensão minima', 'Tensão maxima];
+
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
     var data = new google.visualization.DataTable();
@@ -34,30 +34,50 @@ function drawChartQualidade() {
     for (var i = 0; i < rows.length; i++) {
       var temp = [];
       if (i != 0) {
-		temp.push(rows[i].horario);
+        temp.push(rows[i].horario);
         temp.push(rows[i].tensao);
+        temp.push(201); // Adicionar valor para linha Y=201
+        temp.push(2031); // Adicionar valor para linha Y=2031
       }
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);
   }
-  
+
   // Crie o gráfico com a tabela de dados
   var options = {
     title: 'Qualidade da energia',
     hAxis: {title: 'Horário',  titleTextStyle: {color: '#333'}},
     vAxis: {minValue: 50},
     responsive: true,
+    series: {
+      1: {
+        type: 'line',
+        color: 'red',
+        lineWidth: 1,
+        lineDashStyle: [5, 5], // Estilo de linha tracejada
+        visibleInLegend: true
+      },
+      2: {
+        type: 'line',
+        color: 'orange',
+        lineWidth: 1,
+        lineDashStyle: [5, 5], // Estilo de linha tracejada
+        visibleInLegend: true
+      }
+    }
   };
+
   var formatter = new google.visualization.NumberFormat({
     decimalSymbol: ',', groupingSymbol: '.' 
   });
 
   formatter.format(data, 1);
 
-  var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+  var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
   chart.draw(data, options);
 }
+
 
 function drawChartConsumo() {
   var datad = [];
