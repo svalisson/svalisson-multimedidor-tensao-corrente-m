@@ -22,7 +22,7 @@ if (tipoGrafico === 'consumo') {
 function drawChartQualidade() {
   var datad = [];
   var Headerd = ['Horário', 'Tensão', 'Tensão minima', 'Tensão maxima'];
-
+  console.log(rows)
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
     var data = new google.visualization.DataTable();
@@ -33,12 +33,14 @@ function drawChartQualidade() {
     datad.push(Headerd);
     for (var i = 0; i < rows.length; i++) {
       var temp = [];
-      if (i != 0) {
-        temp.push(rows[i].horario);
+      if (i === 0) {
+        var t = 0
+      }else{
+		temp.push(rows[i].horario);
         temp.push(rows[i].tensao);
         temp.push(201); // Adicionar valor para linha Y=201
         temp.push(2031); // Adicionar valor para linha Y=2031
-      }
+	  }
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);
