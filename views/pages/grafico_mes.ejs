@@ -26,8 +26,8 @@ function drawChartQualidade() {
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
     var data = new google.visualization.DataTable();
-    data.addColumn('number', 'Dia');
-    data.addColumn('number', 'Tensão media');
+    data.addColumn('string', 'Dia');
+    data.addColumn('string', 'Tensão media');
   } else {
     // Preencha os dados na tabela
     datad.push(Headerd);
