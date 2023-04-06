@@ -446,9 +446,9 @@ app.get('/mes', async (req, res, next) => {
   const sql = `
 SELECT concat(extract(day from created_at), '@', extract(month from created_at)) as dia, 
        round(max(cast(energia as numeric)), 2) as energia,
-       coalesce(round(avg(cast(COALESCE(tensao,0) as numeric)), 2),0) as tensao
+       coalesce(round(avg(cast(tensao as numeric)), 2),0) as tensao
 FROM public.medida
-WHERE extract(month from created_at) = '${dateCurrent+1}' 
+WHERE extract(month from created_at) = '${dateCurrent+1}'
 OR(
 extract(month from created_at) = '${dateCurrent+1}'+1 and extract(DAY from created_at) = 1 
 )
