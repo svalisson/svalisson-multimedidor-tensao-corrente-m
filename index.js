@@ -464,7 +464,7 @@ FROM (
   WHERE extract(month from created_at) = '${dateCurrent+1}' +1 AND extract(DAY from created_at) = 1 
   GROUP BY mes, dia
 ) as dados
-ORDER BY dados.mes, dados.dia, dados.energia;
+ORDER BY dados.mes, dados.dia;
  `
   // console.log(sql)
   resPontencia = await client.query(sql)

@@ -48,40 +48,6 @@ function drawChartQualidade() {
     hAxis: { title: 'Dia', titleTextStyle: { color: '#333' } },
     vAxis: { minValue: 100 },
     responsive: true,
-    annotations: {
-      textStyle: { fontName: 'Arial', fontSize: 12 },
-      style: 'line',
-      highContrast: true,
-      alwaysOutside: true,
-      stem: {
-        length: 8,
-        color: 'none',
-      },
-      verticalLine: {
-        color: 'red',
-        style: 'dashed',
-        width: 1,
-      },
-      horizontalLine: {
-        color: 'red',
-        style: 'dashed',
-        width: 1,
-      },
-      datum: [
-        {
-          xValue: '',
-          yValue: 231,
-          tooltip: 'Tensão máxima',
-          color: 'red',
-        },
-        {
-          xValue: '',
-          yValue: 201,
-          tooltip: 'Tensão mínima',
-          color: 'red',
-        },
-      ],
-    },
   };
   
   var formatter = new google.visualization.NumberFormat({
