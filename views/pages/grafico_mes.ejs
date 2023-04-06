@@ -20,7 +20,7 @@ if (tipoGrafico === 'consumo') {
 
 function drawChartQualidade() {
   var datad = [];
-  var Headerd = ['Dia', 'Tensão Media', { role: 'annotation' }, { role: 'annotation' }];
+  var Headerd = ['Dia', 'Tensão Media', 'Linha Y=201', 'Linha Y=231'];
   console.log(rows);
 
   // Se rows.length for igual a zero, crie uma tabela vazia
@@ -49,23 +49,21 @@ function drawChartQualidade() {
     hAxis: { title: 'Dia', titleTextStyle: { color: '#333' } },
     vAxis: { minValue: 100 },
     responsive: true,
-    annotations: {
-      textStyle: {
-        fontSize: 0,
-        color: 'transparent',
+    series: {
+      0: { type: 'column' },
+      1: {
+        type: 'line',
+        color: 'red',
+        lineWidth: 1,
+        lineDashStyle: [5, 5], // Estilo de linha tracejada
+        visibleInLegend: true
       },
-      boxStyle: {
-        stroke: '#000', // cor da linha
-        strokeWidth: 1, // espessura da linha
-        rx: 0,
-        ry: 0,
-        gradient: {
-          color1: 'transparent',
-          color2: 'transparent',
-          x1: '0%', y1: '0%',
-          x2: '100%', y2: '100%',
-          useObjectBoundingBoxUnits: true
-        }
+      2: {
+        type: 'line',
+        color: 'blue',
+        lineWidth: 1,
+        lineDashStyle: [5, 5], // Estilo de linha tracejada
+        visibleInLegend: true
       }
     }
   };
@@ -77,7 +75,7 @@ function drawChartQualidade() {
 
   formatter.format(data, 1);
 
-  var chart = new google.visualization.ColumnChart(
+  var chart = new google.visualization.ComboChart(
     document.getElementById('chart_div')
   );
   chart.draw(data, options);
