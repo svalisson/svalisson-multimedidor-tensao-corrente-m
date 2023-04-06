@@ -33,13 +33,15 @@ function drawChartQualidade() {
     datad.push(Headerd);
     for (var i = 0; i < rows.length; i++) {
       var temp = [];
-      if (i === 0) {
-        var t = 0
+    
+	  temp.push(rows[i].horario);
+	  temp.push(201); // Adicionar valor para linha Y=201
+	  temp.push(231); // Adicionar valor para linha Y=231
+		
+	  if (i === 0) {
+        temp.push(220);
       }else{
-		temp.push(rows[i].horario);
         temp.push(rows[i].tensao);
-        temp.push(201); // Adicionar valor para linha Y=201
-        temp.push(2031); // Adicionar valor para linha Y=2031
 	  }
       datad.push(temp);
     }
