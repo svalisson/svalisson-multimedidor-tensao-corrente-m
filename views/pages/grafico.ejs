@@ -21,7 +21,7 @@ if (tipoGrafico === 'consumo') {
 
 function drawChartQualidade() {
   var datad = [];
-  var Headerd = ['Horário', 'Tensão', 'Tensão minima', 'Tensão maxima'];
+  var Headerd = ['Horário', 'Tensão minima', 'Tensão maxima','Tensão'];
   console.log(rows)
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
@@ -55,14 +55,14 @@ function drawChartQualidade() {
     vAxis: {minValue: 150 , maxValue: 250},
     responsive: true,
     series: {
-      2: {
+      1: {
         type: 'line',
         color: 'red',
         lineWidth: 1,
         lineDashStyle: [5, 5], // Estilo de linha tracejada
         visibleInLegend: true
       },
-      3: {
+      2: {
         type: 'line',
         color: 'orange',
         lineWidth: 1,
