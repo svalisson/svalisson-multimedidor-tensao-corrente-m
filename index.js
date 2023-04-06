@@ -444,16 +444,27 @@ app.get('/mes', async (req, res, next) => {
   //console.log(dateCurrent)
   const client = await connectarClient(config)
   const sql = `
-SELECT concat(extract(day from created_at), '@', extract(month from created_at)) as dia, 
-       round(max(cast(energia as numeric)), 2) as energia,
-       coalesce(round(avg(cast(tensao as numeric)), 2),0) as tensao
-FROM public.medida
-WHERE extract(month from created_at) = '${dateCurrent+1}'
-OR(
-extract(month from created_at) = '${dateCurrent+1}'+1 and extract(DAY from created_at) = 1 
-)
-GROUP BY concat(extract(day from created_at), '@', extract(month from created_at))
-order by energia;
+SELECT dia, energia, tensao
+FROM (
+  SELECT extract(day from created_at) as dia, 
+         round(max(cast(energia as numeric)), 2) as energia,
+         coalesce(round(avg(cast(tensao as numeric)), 2),0) as tensao,
+         extract(month from created_at) as mes
+  FROM public.medida
+  WHERE extract(month from created_at) = '${dateCurrent+1}'
+  GROUP BY mes, dia
+
+  UNION ALL
+
+  SELECT extract(day from created_at) as dia, 
+         round(max(cast(energia as numeric)), 2) as energia,
+         coalesce(round(avg(cast(tensao as numeric)), 2),0) as tensao,
+         extract(month from created_at) as mes
+  FROM public.medida
+  WHERE extract(month from created_at) = '${dateCurrent+1}' +1 AND extract(DAY from created_at) = 1 
+  GROUP BY mes, dia
+) as dados
+ORDER BY dados.mes, dados.dia, dados.energia;
  `
   // console.log(sql)
   resPontencia = await client.query(sql)
