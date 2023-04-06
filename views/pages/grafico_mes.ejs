@@ -22,16 +22,17 @@ if (tipoGrafico === 'consumo') {
 function drawChartQualidade() {
   var datad = [];
   var Headerd = ['Dia', 'Tensão Media'];
-   console.log(rows)
+  console.log(rows);
+  
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Dia');
-    data.addColumn('number', 'Tensão media');
+    data.addColumn('number', 'Tensão Media');
   } else {
     // Preencha os dados na tabela
     datad.push(Headerd);
-    for (var i = 0; i < rows.length -1; i++) {
+    for (var i = 0; i < rows.length - 1; i++) {
       var temp = [];
       var dia = rows[i].dia.split("@");
       temp.push(dia[0]);
@@ -40,9 +41,9 @@ function drawChartQualidade() {
     }
     var data = google.visualization.arrayToDataTable(datad);
   }
-  
+
   // Crie o gráfico com a tabela de dados
- var options = {
+  var options = {
     title: 'Qualidade da energia',
     hAxis: { title: 'Dia', titleTextStyle: { color: '#333' } },
     vAxis: { minValue: 100 },
@@ -53,8 +54,8 @@ function drawChartQualidade() {
       highContrast: true,
       alwaysOutside: true,
       stem: {
-        length: 0,
-        color: 'blue',
+        length: 8,
+        color: 'none',
       },
       verticalLine: {
         color: 'red',
@@ -82,15 +83,20 @@ function drawChartQualidade() {
       ],
     },
   };
+  
   var formatter = new google.visualization.NumberFormat({
-    decimalSymbol: ',', groupingSymbol: '.' 
+    decimalSymbol: ',',
+    groupingSymbol: '.',
   });
 
   formatter.format(data, 1);
 
-  var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+  var chart = new google.visualization.ColumnChart(
+    document.getElementById('chart_div')
+  );
   chart.draw(data, options);
 }
+
 
 
 
