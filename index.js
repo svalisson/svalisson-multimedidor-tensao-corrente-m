@@ -444,7 +444,7 @@ app.get('/mes', async (req, res, next) => {
   //console.log(dateCurrent)
   const client = await connectarClient(config)
   const sql = `
-SELECT concat(extract(day from created_at), '@', extract(month from created_at)) as "dia", 
+SELECT concat(extract(day from created_at), '@', extract(month from created_at)) as dia, 
        round(max(cast(energia as numeric)), 2) as energia,
        round(avg(cast(tensao as numeric)), 2) as tensao
 FROM public.medida
