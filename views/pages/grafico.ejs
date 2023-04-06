@@ -52,10 +52,10 @@ function drawChartQualidade() {
   var options = {
     title: 'Qualidade da energia',
     hAxis: {title: 'Horário',  titleTextStyle: {color: '#333'}},
-    vAxis: {minValue: 50},
+    vAxis: {minValue: 150 , maxValue: 250},
     responsive: true,
     series: {
-      1: {
+      2: {
         type: 'line',
         color: 'red',
         lineWidth: 1,
