@@ -18,12 +18,11 @@ if (tipoGrafico === 'consumo') {
 	google.charts.setOnLoadCallback(drawChartQualidade);
 }
 
-
 function drawChartQualidade() {
   var datad = [];
-  var Headerd = ['Dia', 'Tensão Media'];
+  var Headerd = ['Dia', 'Tensão Media', { role: 'annotation' }, { role: 'annotation' }];
   console.log(rows);
-  
+
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
     var data = new google.visualization.DataTable();
@@ -37,6 +36,8 @@ function drawChartQualidade() {
       var dia = rows[i].dia.split("@");
       temp.push(dia[0]);
       temp.push(Number(rows[i].tensao));
+      temp.push(201); // Adicionar valor para linha Y=201
+      temp.push(231); // Adicionar valor para linha Y=231
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);
@@ -48,8 +49,27 @@ function drawChartQualidade() {
     hAxis: { title: 'Dia', titleTextStyle: { color: '#333' } },
     vAxis: { minValue: 100 },
     responsive: true,
+    annotations: {
+      textStyle: {
+        fontSize: 0,
+        color: 'transparent',
+      },
+      boxStyle: {
+        stroke: '#000', // cor da linha
+        strokeWidth: 1, // espessura da linha
+        rx: 0,
+        ry: 0,
+        gradient: {
+          color1: 'transparent',
+          color2: 'transparent',
+          x1: '0%', y1: '0%',
+          x2: '100%', y2: '100%',
+          useObjectBoundingBoxUnits: true
+        }
+      }
+    }
   };
-  
+
   var formatter = new google.visualization.NumberFormat({
     decimalSymbol: ',',
     groupingSymbol: '.',
