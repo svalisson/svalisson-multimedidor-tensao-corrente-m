@@ -71,11 +71,11 @@ function drawChartConsumo() {
   } else {
     // Preencha os dados na tabela
     datad.push(Headerd);
-    for (var i = 0; i < rows.length; i++) {
+    for (var i = 0; i < rows.length -1; i++) {
       var temp = [];
-      var pont = rows[i].potencia.split("@");
-      temp.push(rows[i].horario);
-      temp.push((+pont[0]) - (+pont[1]));
+      var dia = rows[i].dia.split("@");
+      temp.push(dia[0]);
+	  temp.push((rows[i].energia) - (rows[i+1].energia);
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);

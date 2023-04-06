@@ -443,119 +443,18 @@ app.get('/mes', async (req, res, next) => {
   }
   //console.log(dateCurrent)
   const client = await connectarClient(config)
-  const sql = ` 
-  select total.horario , string_agg(energia, '@'  ORDER BY cast(energia as numeric) DESC) as potencia ,  avg(tensao) as tensao
-    from (
-    
-      
-    select * from (                  
-        select to_char(created_at ,'dd') as horario,potencia, intervalo, energia, tensao,
-        
-          ROW_NUMBER () OVER (
-                            PARTITION BY (to_char(created_at ,'dd'))	
-                            ORDER BY created_at desc 
-                          ) as best
-        
-        from medida
-        where intervalo is not null
-        and   EXTRACT(MONTH FROM  created_at) = ('${dateCurrent+1}')
-        and CAST(nullif(intervalo, '') AS integer) < 60
-        and to_char(created_at ,'dd') in(
-        '01',
-        '02',
-        '03',
-        '04',
-        '05',
-        '06',
-        '07',
-        '08',
-          
-        '09',
-        '10',
-        '11',
-        '12',
-        
-        '13',
-        '14',
-        '15',
-        '16',
-          
-        '17',
-        '18',
-        '19',
-        '20',
-          
-        '21',
-        '22',
-        '23',
-        '24',
-          
-        '25',
-        '26',
-        '27',
-        '28',
-          
-        '29',
-        '30',
-        '31'
-        ) ) as lista
-        where lista.best = 1
-      union all
-      select * from (  
-        select to_char(created_at ,'dd') as horario,potencia, intervalo, energia, tensao,
-        
-          ROW_NUMBER () OVER (
-                            PARTITION BY (to_char(created_at ,'dd'))	
-                            ORDER BY created_at asc 
-                          ) as best
-        
-        from medida
-        where intervalo is not null
-        and   EXTRACT(MONTH FROM  created_at) = ('${dateCurrent+1}')
-        and CAST(nullif(intervalo, '') AS integer) < 60
-        and to_char(created_at ,'dd') in(
-        '01',
-        '02',
-        '03',
-        '04',
-        '05',
-        '06',
-        '07',
-        '08',
-          
-        '09',
-        '10',
-        '11',
-        '12',
-        
-        '13',
-        '14',
-        '15',
-        '16',
-          
-        '17',
-        '18',
-        '19',
-        '20',
-          
-        '21',
-        '22',
-        '23',
-        '24',
-          
-        '25',
-        '26',
-        '27',
-        '28',
-          
-        '29',
-        '30',
-        '31'
-        ) ) as lista
-        where lista.best = 1
-      ) total 
-     group by  total.horario
-      `
+  const sql = `
+SELECT concat(extract(day from created_at), '@', extract(month from created_at)) as "dia", 
+       round(max(cast(energia as numeric)), 2) as energia,
+       round(avg(cast(tensao as numeric)), 2) as tensao
+FROM public.medida
+WHERE extract(month from created_at) = '${dateCurrent+1}' 
+OR(
+extract(month from created_at) = '${dateCurrent+1}'+1 and extract(DAY from created_at) = 1 
+)
+GROUP BY concat(extract(day from created_at), '@', extract(month from created_at))
+order by energia;
+ `
   // console.log(sql)
   resPontencia = await client.query(sql)
   res.render('pages/grafico_mes', { dado: resPontencia.rows});
