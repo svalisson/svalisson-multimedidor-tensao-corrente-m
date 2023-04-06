@@ -7,7 +7,7 @@
   <script type="text/javascript">
 
 var rows = <%-JSON.stringify(dado)%>;
-
+console.log(rows)
 var tipoGrafico = document.querySelector('input[name="tipo_grafico"]:checked').value;
   
 // Use a variável tipoGrafico para decidir qual gráfico gerar
@@ -75,7 +75,7 @@ function drawChartConsumo() {
       var temp = [];
       var dia = rows[i].dia.split("@");
       temp.push(dia[0]);
-	  temp.push((rows[i].energia) - (rows[i+1].energia);
+	  temp.push((rows[i].energia) - (rows[i+1].energia));
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);
