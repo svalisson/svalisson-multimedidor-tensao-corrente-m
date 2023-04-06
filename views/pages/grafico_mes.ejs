@@ -19,6 +19,7 @@ if (tipoGrafico === 'consumo') {
 	google.charts.setOnLoadCallback(drawChartQualidade);
 }
 
+
 function drawChartQualidade() {
   var datad = [];
   var Headerd = ['Dia', 'Tensão Media'];
@@ -31,11 +32,11 @@ function drawChartQualidade() {
   } else {
     // Preencha os dados na tabela
     datad.push(Headerd);
-    for (var i = 0; i < rows.length; i++) {
+    for (var i = 0; i < rows.length -1; i++) {
       var temp = [];
-      var ten = rows[i].tensao.split("@");
-      temp.push(rows[i].horario);
-      temp.push((+ten[0]) - (+ten[1]));
+      var dia = rows[i].dia.split("@");
+      temp.push(dia[0]);
+      temp.push(rows[i].tensao);
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);
@@ -46,6 +47,38 @@ function drawChartQualidade() {
     title: 'Qualidade da energia',
     hAxis: {title: 'Dia',  titleTextStyle: {color: '#333'}},
     vAxis: {minValue: 100},
+    annotations: {
+      textStyle: {
+        fontSize: 12,
+        color: 'black'
+      },
+      style: 'line',
+      alwaysOutside: true,
+      highContrast: true,
+      // Adicione as linhas pontilhadas aqui
+      horizontal: [
+        {
+          color: 'red',
+          strokeWidth: 1,
+          opacity: 0.5,
+          value: 231,
+          label: {
+            text: 'Tensão máxima',
+            position: 'right'
+          }
+        },
+        {
+          color: 'yellow',
+          strokeWidth: 1,
+          opacity: 0.5,
+          value: 201,
+          label: {
+            text: 'Tensão mínima',
+            position: 'right'
+          }
+        }
+      ]
+    },
     responsive: true,
   };
   var formatter = new google.visualization.NumberFormat({
@@ -57,6 +90,7 @@ function drawChartQualidade() {
   var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
   chart.draw(data, options);
 }
+
 
 
 function drawChartConsumo() {
@@ -75,7 +109,7 @@ function drawChartConsumo() {
       var temp = [];
       var dia = rows[i].dia.split("@");
       temp.push(dia[0]);
-	  temp.push((rows[i].energia) - (rows[i+1].energia));
+	  temp.push((rows[i+1].energia) - (rows[i].energia));
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);
