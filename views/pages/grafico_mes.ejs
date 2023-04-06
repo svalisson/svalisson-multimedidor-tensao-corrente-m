@@ -26,8 +26,8 @@ function drawChartQualidade() {
   // Se rows.length for igual a zero, crie uma tabela vazia
   if (rows.length === 0) {
     var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Dia');
-    data.addColumn('number', 'Tensão Media');
+    data.addColumn('number', 'Dia');
+    data.addColumn('number', 'Tensão media');
   } else {
     // Preencha os dados na tabela
     datad.push(Headerd);
@@ -46,8 +46,40 @@ function drawChartQualidade() {
     title: 'Qualidade da energia',
     hAxis: {title: 'Dia',  titleTextStyle: {color: '#333'}},
     vAxis: {minValue: 100},
+    annotations: {
+      textStyle: {
+        fontSize: 12,
+        color: 'black'
+      },
+      style: 'line',
+      alwaysOutside: true,
+      highContrast: true,
+      // Adicione as linhas pontilhadas aqui
+      horizontal: [
+        {
+          color: 'red',
+          strokeWidth: 1,
+          opacity: 0.5,
+          value: 231,
+          label: {
+            text: 'Tensão máxima',
+            position: 'right'
+          }
+        },
+        {
+          color: 'yellow',
+          strokeWidth: 1,
+          opacity: 0.5,
+          value: 201,
+          label: {
+            text: 'Tensão mínima',
+            position: 'right'
+          }
+        }
+      ]
+    },
     responsive: true,
-	};
+  };
   var formatter = new google.visualization.NumberFormat({
     decimalSymbol: ',', groupingSymbol: '.' 
   });
