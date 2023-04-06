@@ -81,7 +81,7 @@ function drawChartConsumo() {
       var temp = [];
       var dia = rows[i].dia.split("@");
       temp.push(dia[0]);
-	  temp.push((rows[i+1].energia) - (rows[i].energia));
+	  temp.push(Math.max((rows[i+1].energia) - (rows[i].energia), 0));
       datad.push(temp);
     }
     var data = google.visualization.arrayToDataTable(datad);
