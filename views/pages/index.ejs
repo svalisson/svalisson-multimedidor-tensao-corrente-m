@@ -326,7 +326,7 @@
 
     <div class="conteudo">
         <div class="barras-de-medicoes-na">
-            <div  style="display: inline-block;">
+            <div>
                 <div>
                     <label>Data:</label><br>
                     <input type="text" id="datePickerInput" style="width: 200px; display: inline-block;" placeholder="Escolha uma data">
@@ -441,25 +441,37 @@
                     </script>
 
                     <br>
-                    <label for="tipo_grafico">Tipo:</label><br>
+                    <label for="grandeza_grafico">Grandeza:</label><br>
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="consumo" name="tipo_grafico" value="consumo" checked>
+                        <input type="radio" id="consumo" name="grandeza_grafico" value="consumo" checked>
                         Consumo
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="qualidade" name="tipo_grafico" value="qualidade">
+                        <input type="radio" id="qualidade" name="grandeza_grafico" value="qualidade">
                         Qualidade
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="dic" name="tipo_grafico" value="dic">
+                        <input type="radio" id="dic" name="grandeza_grafico" value="dic">
                         DIC
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="fic" name="tipo_grafico" value="fic">
+                        <input type="radio" id="fic" name="grandeza_grafico" value="fic">
                         FIC
+                    </label><br>
+
+                    <br>
+                    <label for="tipo_grafico">Tipo:</label><br>
+                    <label style="display: inline-block; margin-right: 20px;">
+                        <input type="radio" id="linhas" name="tipo_grafico" value="linhas" checked>
+                        Grafico de linhas
+                    </label><br>
+
+                    <label style="display: inline-block; margin-right: 20px;">
+                        <input type="radio" id="barras" name="tipo_grafico" value="barras">
+                        Grafico de barras
                     </label><br>
                 </div>
             </div>
