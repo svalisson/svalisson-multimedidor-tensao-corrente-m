@@ -8,7 +8,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>  
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
   <script type="text/javascript"> 
    // --------------- --------------- --------------- --------------- ---------------
    
@@ -198,12 +198,6 @@
     });
   </script>
 
-<style>
-    #datePickerOptions {
-        display: none;
-    }
-</style>
-
 </head>
 
 <body onload="attValoresControle()">
@@ -340,6 +334,8 @@
                 <!-- Encapsule o date picker em um container -->
                 <div class="datePickerContainer" style="display: inline-block; position: relative;">
                     <input type="text" id="datePickerInput" placeholder="Escolha uma data">
+                    <!-- Adicionei um elemento para exibir a data selecionada -->
+                    <span id="datePickerLabel" style="margin-left: 5px; cursor: pointer;"></span>
                     <div id="datePickerOptions">
                         <label><input type="radio" name="period" value="day"> Dia</label>
                         <label><input type="radio" name="period" value="week"> Semana</label>
