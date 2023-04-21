@@ -330,8 +330,6 @@
                 <span>
                     Data :
                 </span>
-
-                <!-- Encapsule o date picker em um container -->
                 <input type="text" id="datePickerInput" placeholder="Escolha uma data">
                     <div id="datePickerOptions" style="color: black; display: none;">
                         <label><input type="radio" name="period" value="day"> Dia</label>
@@ -350,7 +348,12 @@
                     const datePickerOptions = document.getElementById("datePickerOptions");
                 
                     const flatpickrInstance = flatpickr(datePickerInput, {
-                        // Configurações do Flatpickr
+                        mode: "range",
+                        maxDate: "tomorrow",
+                        dateFormat: "d/m/Y",
+                        locale: "pt",
+                        firstDayOfWeek: 0,
+
                         onReady: function () {
                             const fp = this;
                             if (!fp.calendarContainer.contains(datePickerOptions)) {
@@ -358,6 +361,11 @@
                             }
                             datePickerOptions.style.display = 'block';
                         },
+                       
+                        onClose: function (selectedDates, dateStr) {
+                            updateGraph(dateStr);
+                        },
+
                         onOpen: function () {
                             datePickerOptions.style.display = 'block';
                         },
@@ -419,12 +427,12 @@
                         fp.setDate([startDate, endDate]);
                     }
             
-                    function updateLabel(dateStr) {
+                    function updateGraph(dateStr) {
                         const dates = dateStr.split(" to ");
                         if (dates.length === 1) {
-                            datePickerLabel.textContent = dates[0];
+                            console.log( dates[0]);
                         } else if (dates.length === 2) {
-                            datePickerLabel.textContent = `${dates[0]} até ${dates[1]}`;
+                           console.log(`${dates[0]} até ${dates[1]}`);
                         }
                     }
             
@@ -433,21 +441,24 @@
                     });
                 </script>
 
-                <br>
-                <label for="tipo_grafico">Tipo:</label><br>
-                <input type="radio" id="consumo" name="tipo_grafico" value="consumo" checked>
-                <label for="consumo">Consumo</label><br>
 
-                <input type="radio" id="qualidade" name="tipo_grafico" value="qualidade">
-                <label for="qualidade">Qualidade</label><br>
+        </div>
+        
+        <div>
+        <br>
+            <label for="tipo_grafico">Tipo:</label><br>
+            <input type="radio" id="consumo" name="tipo_grafico" value="consumo" checked>
+            <label for="consumo">Consumo</label><br>
 
-                <input type="radio" id="dic" name="tipo_grafico" value="dic">
-                <label for="dic">DIC</label><br>
+            <input type="radio" id="qualidade" name="tipo_grafico" value="qualidade">
+            <label for="qualidade">Qualidade</label><br>
 
-                <input type="radio" id="fic" name="tipo_grafico" value="fic">
-                <label for="fic">FIC</label><br>
+            <input type="radio" id="dic" name="tipo_grafico" value="dic">
+            <label for="dic">DIC</label><br>
 
-            </div>
+            <input type="radio" id="fic" name="tipo_grafico" value="fic">
+            <label for="fic">FIC</label><br>
+        </div>
 
         </div>
 
