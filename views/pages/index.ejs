@@ -333,29 +333,6 @@
                 Data :
             </span>
 
-            <select name="dia" onchange="javascript:atualizarGrafico(this.value)" >
-           
-                <% for (var i =0; i < data_current.length;  i++ ) { %>
-                    <option value=<%= data_current[i].datas.toISOString() %>   <%= data_current[i].datas.toISOString()  === data_current[i].hoje.toISOString()  ? 'selected' : '' %> >
-                        <%= data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , day: "2-digit"}) +"/"+data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , month: "2-digit"})+"/"+data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , year: "numeric" })%>
-                    </option>
-                <% } %>
-            </select>
-
-            <span>
-                Mês : &nbsp;
-            </span>
-            <select name="dia" onchange="javascript:atualizarGraficoMes(this.value)" >
-                <option value='-1'   >
-                   Selecione
-                </option>
-                <% for (var i =0; i <= mesa.length;  i++ ) { %>,
-                    <option value=<%= i %>   >
-                        <%= mesa[i]%>
-                    </option>
-                <% } %>
-            </select>
-
             <input type="text" id="datePickerInput" placeholder="Escolha uma data">
             <div id="datePickerOptions">
                 <label><input type="radio" name="period" value="day"> Dia</label>
@@ -373,7 +350,6 @@
         
                 const flatpickrInstance = flatpickr(datePickerInput, {
                     mode: "range",
-                    maxDate: "tomorrow",
                     dateFormat: "d/m/Y",
                     locale: "pt",
                     firstDayOfWeek: 0,
