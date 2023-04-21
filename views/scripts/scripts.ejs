@@ -12,7 +12,13 @@
 
 
   <script type="text/javascript">
-    // --------------- --------------- --------------- --------------- ---------------
+    // Adicione o código aqui, no início da seção <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(function() {
+          // Você pode chamar outras funções relacionadas aos gráficos aqui.
+        });
+      });
     
      // Inicialização do Firebase:
      firebase.initializeApp( {
