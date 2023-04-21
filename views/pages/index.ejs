@@ -332,11 +332,8 @@
                 </span>
 
                 <!-- Encapsule o date picker em um container -->
-                <div class="datePickerContainer" style="display: inline-block; position: relative;">
-                    <input type="text" id="datePickerInput" placeholder="Escolha uma data">
-                    <!-- Adicionei um elemento para exibir a data selecionada -->
-                    <span id="datePickerLabel" style="margin-left: 5px; cursor: pointer;"></span>
-                    <div id="datePickerOptions">
+                <input type="text" id="datePickerInput" placeholder="Escolha uma data">
+                    <div id="datePickerOptions" style="color: black; display: none;">
                         <label><input type="radio" name="period" value="day"> Dia</label>
                         <label><input type="radio" name="period" value="week"> Semana</label>
                         <label><input type="radio" name="period" value="month"> Mês</label>
@@ -351,23 +348,19 @@
                 <script>
                     const datePickerInput = document.getElementById("datePickerInput");
                     const datePickerOptions = document.getElementById("datePickerOptions");
-            
+                
                     const flatpickrInstance = flatpickr(datePickerInput, {
-                        mode: "range",
-                        maxDate: "tomorrow",
-                        dateFormat: "d/m/Y",
-                        locale: "pt",
-                        firstDayOfWeek: 0,
-                        onClose: function (selectedDates, dateStr) {
-                            updateLabel(dateStr);
-                        },
-                        onOpen: function () {
+                        // Configurações do Flatpickr
+                        onReady: function () {
                             const fp = this;
                             if (!fp.calendarContainer.contains(datePickerOptions)) {
                                 fp.calendarContainer.appendChild(datePickerOptions);
                             }
                             datePickerOptions.style.display = 'block';
-                        }
+                        },
+                        onOpen: function () {
+                            datePickerOptions.style.display = 'block';
+                        },
                     });
             
                     datePickerOptions.addEventListener("change", function (event) {
@@ -440,14 +433,22 @@
                     });
                 </script>
 
+                <br>
+                <label for="tipo_grafico">Tipo:</label><br>
+                <input type="radio" id="consumo" name="tipo_grafico" value="consumo" checked>
+                <label for="consumo">Consumo</label><br>
+
+                <input type="radio" id="qualidade" name="tipo_grafico" value="qualidade">
+                <label for="qualidade">Qualidade</label><br>
+
+                <input type="radio" id="dic" name="tipo_grafico" value="dic">
+                <label for="dic">DIC</label><br>
+
+                <input type="radio" id="fic" name="tipo_grafico" value="fic">
+                <label for="fic">FIC</label><br>
+
             </div>
 
-            <br>
-            <label for="tipo_grafico">Tipo:</label><br>
-            <input type="radio" id="consumo" name="tipo_grafico" value="consumo" checked>
-            <label for="consumo">Consumo</label><br>
-            <input type="radio" id="qualidade" name="tipo_grafico" value="qualidade">
-            <label for="qualidade">Qualidade</label><br>
         </div>
 
         <div id="chart_div" style="width: 100%; height: 400px;"></div>
