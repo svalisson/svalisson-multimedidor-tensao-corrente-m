@@ -330,7 +330,8 @@
                 <span>
                     Data :
                 </span>
-                <input type="text" id="datePickerInput" style="width: 150px;" placeholder="Escolha uma data">
+                
+                <input type="text" id="datePickerInput" style="width: 200px;" placeholder="Escolha uma data">
                     <div id="datePickerOptions" style="color: black; display: none;">
                         <label><input type="radio" name="period" value="day"> Dia</label>
                         <label><input type="radio" name="period" value="week"> Semana</label>
@@ -441,31 +442,30 @@
                     });
                 </script>
 
+            <div>
+                <br>
+                <label for="tipo_grafico">Tipo:</label><br>
+                <label style="display: inline-block; margin-right: 20px;">
+                    <input type="radio" id="consumo" name="tipo_grafico" value="consumo" checked>
+                    Consumo
+                </label><br>
 
-        </div>
-        
-        <div>
-            <br>
-            <label for="tipo_grafico">Tipo:</label><br>
-            <label style="display: inline-block; margin-right: 10px;">
-                <input type="radio" id="consumo" name="tipo_grafico" value="consumo" checked>
-                Consumo
-            </label><br>
-        
-            <label style="display: inline-block; margin-right: 10px;">
-                <input type="radio" id="qualidade" name="tipo_grafico" value="qualidade">
-                Qualidade
-            </label><br>
-        
-            <label style="display: inline-block; margin-right: 10px;">
-                <input type="radio" id="dic" name="tipo_grafico" value="dic">
-                DIC
-            </label><br>
-        
-            <label style="display: inline-block; margin-right: 10px;">
-                <input type="radio" id="fic" name="tipo_grafico" value="fic">
-                FIC
-            </label><br>
+                <label style="display: inline-block; margin-right: 20px;">
+                    <input type="radio" id="qualidade" name="tipo_grafico" value="qualidade">
+                    Qualidade
+                </label><br>
+
+                <label style="display: inline-block; margin-right: 20px;">
+                    <input type="radio" id="dic" name="tipo_grafico" value="dic">
+                    DIC
+                </label><br>
+
+                <label style="display: inline-block; margin-right: 20px;">
+                    <input type="radio" id="fic" name="tipo_grafico" value="fic">
+                    FIC
+                </label><br>
+            </div>
+
         </div>
         
 
