@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+var rows = <%-JSON.stringify(dado)%>;
+
+
+var grandezaGrafico = document.querySelector('input[name="grandeza_grafico"]:checked').value;
+var tipoGrafico = document.querySelector('input[name="tipo_grafico"]:checked').value;
+
+
+// Use a variável tipoGrafico para decidir qual gráfico gerar
+if (tipoGrafico === 'consumo') {
+	google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+	google.charts.setOnLoadCallback(drawChartConsumo);
+
+} else if (tipoGrafico === 'qualidade') {
+	
+} else if (tipoGrafico === 'qualidade') {
+}
+
+
+function drawGenericChart(elementId, chartType, title, hAxisTitle, vAxisTitle, rows, extraSeries) {
+  const data = [];
+  const header = [hAxisTitle, vAxisTitle];
+
+  if (chartType === "ComboChart" && extraSeries) {
+    header.push(...extraSeries.map((serie) => serie.name));
+  }
+
+  data.push(header);
+
+  if (rows.length === 0) {
+    data.push(["", 0]);
+  } else {
+    for (let i = 0; i < rows.length; i++) {
+      const temp = [rows[i][0], rows[i][1]];
+
+      if (chartType === "ComboChart" && extraSeries) {
+        extraSeries.forEach((serie) => {
+          temp.push(serie.value);
+        });
+      }
+
+      data.push(temp);
+    }
+  }
+
+  const dataTable = google.visualization.arrayToDataTable(data);
+
+  const options = {
+    title,
+    hAxis: { title: hAxisTitle, titleTextStyle: { color: "#333" } },
+    vAxis: { minValue: 0 },
+    responsive: true,
+    series: {},
+  };
+
+  if (chartType === "ComboChart" && extraSeries) {
+    extraSeries.forEach((serie, index) => {
+      options.series[index + 1] = serie.options;
+    });
+  }
+
+  const formatter = new google.visualization.NumberFormat({
+    decimalSymbol: ",",
+    groupingSymbol: ".",
+  });
+
+  formatter.format(dataTable, 1);
+
+  const chart = new google.visualization[chartType](document.getElementById(elementId));
+  chart.draw(dataTable, options);
+}
+
+</script>
+
+
+</head>
+
+<body>
+    <div id="chart_div" style="width: 1000px; height: 500px;"></div>
+</body>
+</html>
