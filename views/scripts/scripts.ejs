@@ -206,6 +206,7 @@
          });
      });
   
+     //---------------------DESENHAR GRAFICOS --------------------
   // Carregar a biblioteca do Google Charts
   google.charts.load("current", { packages: ["corechart", "line"] });
 
@@ -251,6 +252,11 @@
     vAxis: { minValue: 0 },
     responsive: true,
     series: {},
+    explorer: {
+    actions: ["dragToZoom", "rightClickToReset"],
+    axis: "both",
+    keepInBounds: true,
+  },
   };
 
   if (chartType === "ComboChart" && extraSeries) {
