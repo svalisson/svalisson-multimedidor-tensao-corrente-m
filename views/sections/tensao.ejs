@@ -113,28 +113,29 @@
                             let dateStr = datePickerInputTensao.value;
                             const dates = dateStr.split(" to ");
                             let dateRangeValid = true;
+                            let datesTuple;
 
                             if (dates.length === 1) {
                                 console.log(dates[0]);
-                                const datesTuple = [dates[0],dates[0]]
+                                datesTuple = [dates[0], dates[0]]
                             } else if (dates.length === 2) {
                                 console.log(`${dates[0]} até ${dates[1]}`);
-                                const datesTuple = [dates[0],dates[1]]
+                                datesTuple = [dates[0], dates[1]]
                             }
 
                             const convertedDates = [];
 
                             for (const date of datesTuple) {
-                            const [day, month, year] = date.split('/');
-                            const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-                            convertedDates.push(formattedDate);
+                                const [day, month, year] = date.split('/');
+                                const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                                convertedDates.push(formattedDate);
                             }
-                            
+
                             // Valida as datas no formato ANO-MÊS-DIA (por exemplo, '2023-03-31')
                             const datePattern = /^\d{4}-\d{2}-\d{2}$/;
                             convertedDates.forEach(date => {
                                 if (!datePattern.test(date.trim())) {
-                                dateRangeValid = false;
+                                    dateRangeValid = false;
                                 }
                             });
 
@@ -143,7 +144,6 @@
                                 console.error("Formato de data inválido. Use o formato ANO-MÊS-DIA (por exemplo, '2023-03-31').");
                                 return;
                             }
-                            
 
                             // Obter o valor do grupo Histórico
                             let historicoRadioButtons = document.getElementsByName('historico_tensao');
