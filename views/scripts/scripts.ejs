@@ -98,15 +98,6 @@
      }
  
  
-       
-     function atualizarGrafico(value){
-         $( "#chart_div" ).load( "/profile?date="+value+"");
-     }
- 
-     function atualizarGraficoMes(value){
-         $( "#chart_div" ).load( "/mes?date="+value+"");
-     }
- 
     function enviarCalculo(){
  
          if($("#datainicio").val() == ''){
@@ -253,7 +244,7 @@
     responsive: true,
     series: {},
     explorer: {
-    actions: ["dragToZoom", "rightClickToReset"],
+    actions: ["dragToZoom", "rightClickToReset", "dragToPan", "scrollToZoom"],
     axis: "both",
     keepInBounds: true,
   },
@@ -275,5 +266,37 @@
   const chart = new google.visualization[chartType](document.getElementById(elementId));
   chart.draw(dataTable, options);
 }
+
+   //--------------------- BUSCA DADOS PARA GRAFICOS --------------------
+
+   function getDataFromServer(dataInicial, dataFinal, grandeza, discretizacao) {
+  return new Promise((resolve, reject) => {
+    fetch(`/getdata?data_inicial=${dataInicial}&data_final=${dataFinal}&grandeza=${grandeza}&discretizacao=${discretizacao}`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Falha na requisição');
+        }
+      })
+      .then(data => {
+        // Converte o JSON em uma lista de listas
+        const dataList = data.map(item => Object.values(item));
+
+        // Resolve a promessa com dataList
+        resolve(dataList);
+      })
+      .catch(error => {
+        console.error('Erro na requisição:', error);
+        reject(error);
+      });
+  });
+  }
+
+
+
+
+
+
 
    </script>
