@@ -273,17 +273,14 @@
                         <input type="radio" id="agrupado_anual" name="agrupado_tensao" value="anual" onchange="updateGraphsTensao()">
                         Anual
                     </label><br>
-                    
                 </div>
                 <div id="chart_div_tensao_historico" style="width: 100%; height: 400px;"></div>
+            </div>
     
-                <!-- Nova div abaixo do elemento com display: inline-block; -->
-                <div style="width: 100%;">
-                    <div id="chart_div_tensao_agrupado" style="width: 100%; height: 400px; display: inline-block;"></div>
-                    <div id="chart_div_tensao_variacao" style="width: 100%; height: 400px; display: inline-block;"></div>
-                </div>
-    
-                <br>
+            <!-- Nova div fora do elemento com display: inline-block; -->
+            <div style="width: 100%;">
+                <div id="chart_div_tensao_agrupado" style="width: 50%; height: 400px; display: inline-block;"></div>
+                <div id="chart_div_tensao_variacao" style="width: 50%; height: 400px; display: inline-block;"></div>
             </div>
         </div>
     </section>
