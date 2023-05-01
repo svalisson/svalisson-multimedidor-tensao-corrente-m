@@ -8,7 +8,8 @@
             <div style="display: inline-block;">
                 <div>
                     <label>Data:</label><br>
-                    <input type="text" id="datePickerInputFornecimento" style="width: 200px; display: inline-block;" placeholder="Escolha uma data">
+                    <input type="text" id="datePickerInputFornecimento" style="width: 200px; display: inline-block;"
+                        placeholder="Escolha uma data">
                     <div id="datePickerOptionsFornecimento" style="color: black; display: none;">
                         <label><input type="radio" name="periodFornecimento" value="day"> Dia</label>
                         <label><input type="radio" name="periodFornecimento" value="week"> Semana</label>
@@ -57,16 +58,16 @@
                                 flatpickrInstanceFornecimento.open();
                             }
                         });
-                
+
                         // Restante do código
-                
+
                         function updateDatePickerFornecimento(fp) {
-                        const period = document.querySelector('input[name="periodFornecimento"]:checked').value;
-                        const time = document.querySelector('input[name="timeFornecimento"]:checked').value;
-                        const today = new Date();
-                        let startDate = new Date(today);
-                        let endDate = new Date(today);
-                
+                            const period = document.querySelector('input[name="periodFornecimento"]:checked').value;
+                            const time = document.querySelector('input[name="timeFornecimento"]:checked').value;
+                            const today = new Date();
+                            let startDate = new Date(today);
+                            let endDate = new Date(today);
+
                             if (period === "day") {
                                 if (time === "past") {
                                     startDate.setDate(startDate.getDate() - 1);
@@ -79,14 +80,14 @@
                                     startDate.setDate(startDate.getDate() - (startDate.getDay() + 6));
                                     endDate.setDate(startDate.getDate() + 6);
                                 }
-                                
+
                             } else if (period === "month") {
                                 if (time === "past") {
                                     startDate.setMonth(startDate.getMonth() - 1);
                                     endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
                                 }
                                 startDate.setDate(1);
-                                
+
                             } else if (period === "semester") {
                                 if (time === "past") {
                                     startDate.setMonth(startDate.getMonth() - 6);
@@ -100,128 +101,133 @@
                                     endDate = new Date(startDate.getFullYear() + 1, 0, 0);
                                 }
                                 startDate.setMonth(0);
-                                startDate.setDate(1); 
+                                startDate.setDate(1);
                             }
-                
+
                             fp.setDate([startDate, endDate]);
                         }
 
                         function updateGraphsFornecimento() {
-                        const getDateAsIsoFormat = (dateString) => {
-                            const [day, month, year] = dateString.split('/');
-                            return `${year}-${month}-${day}`;
-                        };
+                            const getDateAsIsoFormat = (dateString) => {
+                                const [day, month, year] = dateString.split('/');
+                                return `${year}-${month}-${day}`;
+                            };
 
-                        let datePickerInputFornecimento = document.getElementById('datePickerInputFornecimento');
-                        let dateRangeString = datePickerInputFornecimento.value;
-                        let dateStrings = dateRangeString.split(' até ');
+                            let datePickerInputFornecimento = document.getElementById('datePickerInputFornecimento');
+                            let dateRangeString = datePickerInputFornecimento.value;
+                            let dateStrings = dateRangeString.split(' até ');
 
-                        if (dateStrings.length === 1) {
-                            dateStrings.push(dateStrings[0]);
-                        }
-
-                        let convertedDates = dateStrings.map(getDateAsIsoFormat);
-
-                        // Obter o valor do grupo Histórico
-                        let historicoRadioButtons = document.getElementsByName('historico_fornecimento');
-                        let historicoDiscretizacao;
-                        for (let i = 0; i < historicoRadioButtons.length; i++) {
-                            if (historicoRadioButtons[i].checked) {
-                                historicoDiscretizacao = historicoRadioButtons[i].value;
-                                break;
+                            if (dateStrings.length === 1) {
+                                dateStrings.push(dateStrings[0]);
                             }
-                        }
 
-                        // Obter o valor do grupo Agrupado
-                        let agrupadoRadioButtons = document.getElementsByName('agrupado_fornecimento');
-                        let agrupadoDiscretizacao;
-                        for (let i = 0; i < agrupadoRadioButtons.length; i++) {
-                            if (agrupadoRadioButtons[i].checked) {
-                                agrupadoDiscretizacao = agrupadoRadioButtons[i].value;
-                                break;
+                            let convertedDates = dateStrings.map(getDateAsIsoFormat);
+
+                            // Obter o valor do grupo Histórico
+                            let historicoRadioButtons = document.getElementsByName('historico_fornecimento');
+                            let historicoDiscretizacao;
+                            for (let i = 0; i < historicoRadioButtons.length; i++) {
+                                if (historicoRadioButtons[i].checked) {
+                                    historicoDiscretizacao = historicoRadioButtons[i].value;
+                                    break;
+                                }
                             }
+
+                            // Obter o valor do grupo Agrupado
+                            let agrupadoRadioButtons = document.getElementsByName('agrupado_fornecimento');
+                            let agrupadoDiscretizacao;
+                            for (let i = 0; i < agrupadoRadioButtons.length; i++) {
+                                if (agrupadoRadioButtons[i].checked) {
+                                    agrupadoDiscretizacao = agrupadoRadioButtons[i].value;
+                                    break;
+                                }
+                            }
+
+                            // Chama getDataFromServer e atualiza o gráfico historico com os dados recebidos
+                            getDataFromServer(convertedDates[0], convertedDates[1], 'nivel_logico', historicoDiscretizacao)
+                                .then(dataList => {
+                                    drawGenericChart(
+                                        "chart_div_fornecimento_historico",
+                                        "LineChart",
+                                        "Fornecimento no período",
+                                        "Horário",
+                                        "Nivel Logico",
+                                        dataList,
+                                        null
+                                    );
+                                })
+                                .catch(error => {
+                                    console.error('Erro ao obter dados do servidor:', error);
+                                });
+
+                            // Chama getDataFromServer e atualiza o gráfico agrupado com os dados recebidos
+                            getDataFromServer(convertedDates[0], convertedDates[1], 'dic', agrupadoDiscretizacao)
+                                .then(dataList => {
+                                    drawGenericChart(
+                                        "chart_div_dic",
+                                        "ColumnChart",
+                                        "DIC",
+                                        "Data",
+                                        "Tempo em minutos",
+                                        dataList,
+                                        null
+                                    );
+                                })
+                                .catch(error => {
+                                    console.error('Erro ao obter dados do servidor:', error);
+                                });
+
+                            // Chama getDataFromServer e atualiza o gráfico de variação com os dados recebidos
+                            getDataFromServer(convertedDates[0], convertedDates[1], 'fic', agrupadoDiscretizacao)
+                                .then(dataList => {
+                                    drawGenericChart(
+                                        "chart_div_fic",
+                                        "ColumnChart",
+                                        "FIC",
+                                        "Data",
+                                        "Quantidade",
+                                        dataList,
+                                        null
+                                    );
+                                })
+                                .catch(error => {
+                                    console.error('Erro ao obter dados do servidor:', error);
+                                });
+
                         }
 
-                        // Chama getDataFromServer e atualiza o gráfico historico com os dados recebidos
-                        getDataFromServer(convertedDates[0], convertedDates[1], 'fornecimento_historico', historicoDiscretizacao)
-                            .then(dataList => {
-                                drawGenericChart(
-                                    "chart_div_fornecimento_historico",
-                                    "LineChart",
-                                    "Fornecimento no período",
-                                    "Horário",
-                                    "Fornecimento",
-                                    dataList,
-                                    null
-                                );
-                            })
-                            .catch(error => {
-                                console.error('Erro ao obter dados do servidor:', error);
-                            });
 
-                        // Chama getDataFromServer e atualiza o gráfico agrupado com os dados recebidos
-                        getDataFromServer(convertedDates[0], convertedDates[1], 'fornecimento_agrupado', agrupadoDiscretizacao)
-                            .then(dataList => {
-                                drawGenericChart(
-                                    "chart_div_fornecimento_agrupado",
-                                    "ColumnChart",
-                                    "Fornecimento",
-                                    "Data",
-                                    "Fornecimento",
-                                    dataList,
-                                    null
-                                );
-                            })
-                            .catch(error => {
-                                console.error('Erro ao obter dados do servidor:', error);
-                            });
-
-                        // Chama getDataFromServer e atualiza o gráfico de variação com os dados recebidos
-                        getDataFromServer(convertedDates[0], convertedDates[1], 'fornecimento_variacao', agrupadoDiscretizacao)
-                            .then(dataList => {
-                                drawGenericChart(
-                                    "chart_div_fornecimento_variacao",
-                                    "ColumnChart",
-                                    "Flutuação do fornecimento",
-                                    "Data",
-                                    "Flutuação",
-                                    dataList,
-                                    null
-                                );
-                            })
-                            .catch(error => {
-                                console.error('Erro ao obter dados do servidor:', error);
-                            });
-
-                    }
-
-                
                     </script>
 
                     <br>
                     <label for="historico_fornecimento">Histórico:</label><br>
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="historico_completo_fornecimento" name="historico_fornecimento" value="completo" onchange="updateGraphsFornecimento()" >
+                        <input type="radio" id="historico_completo_fornecimento" name="historico_fornecimento"
+                            value="completo" onchange="updateGraphsFornecimento()">
                         Completo
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="historico_5min_fornecimento" name="historico_fornecimento" value="5min" onchange="updateGraphsFornecimento()" >
+                        <input type="radio" id="historico_5min_fornecimento" name="historico_fornecimento" value="5min"
+                            onchange="updateGraphsFornecimento()">
                         5 Minutos
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="historico_15min_fornecimento" name="historico_fornecimento" value="15min" checked onchange="updateGraphsFornecimento()">
+                        <input type="radio" id="historico_15min_fornecimento" name="historico_fornecimento"
+                            value="15min" checked onchange="updateGraphsFornecimento()">
                         15 Minutos
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="historico_30min_fornecimento" name="historico_fornecimento" value="30min" onchange="updateGraphsFornecimento()">
+                        <input type="radio" id="historico_30min_fornecimento" name="historico_fornecimento"
+                            value="30min" onchange="updateGraphsFornecimento()">
                         30 Minutos
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="historico_1hora_fornecimento" name="historico_fornecimento" value="1hora" onchange="updateGraphsFornecimento()">
+                        <input type="radio" id="historico_1hora_fornecimento" name="historico_fornecimento"
+                            value="1hora" onchange="updateGraphsFornecimento()">
                         1 Hora
                     </label><br>
 
@@ -229,42 +235,46 @@
 
                     <label for="agrupado_fornecimento">Agrupado:</label><br>
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="agrupado_diario_fornecimento" name="agrupado_fornecimento" value="diario" checked onchange="updateGraphsFornecimento()">
+                        <input type="radio" id="agrupado_diario_fornecimento" name="agrupado_fornecimento"
+                            value="diario" checked onchange="updateGraphsFornecimento()">
                         Diário
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="agrupado_semanal_fornecimento" name="agrupado_fornecimento" value="semanal" onchange="updateGraphsFornecimento()">
+                        <input type="radio" id="agrupado_semanal_fornecimento" name="agrupado_fornecimento"
+                            value="semanal" onchange="updateGraphsFornecimento()">
                         Semanal
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="agrupado_mensal_fornecimento" name="agrupado_fornecimento" value="mensal" onchange="updateGraphsFornecimento()">
+                        <input type="radio" id="agrupado_mensal_fornecimento" name="agrupado_fornecimento"
+                            value="mensal" onchange="updateGraphsFornecimento()">
                         Mensal
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="agrupado_semestral_fornecimento" name="agrupado_fornecimento" value="semestral" onchange="updateGraphsFornecimento()">
+                        <input type="radio" id="agrupado_semestral_fornecimento" name="agrupado_fornecimento"
+                            value="semestral" onchange="updateGraphsFornecimento()">
                         Semestral
                     </label><br>
 
                     <label style="display: inline-block; margin-right: 20px;">
-                        <input type="radio" id="agrupado_anual_fornecimento" name="agrupado_fornecimento" value="anual" onchange="updateGraphsFornecimento()">
+                        <input type="radio" id="agrupado_anual_fornecimento" name="agrupado_fornecimento" value="anual"
+                            onchange="updateGraphsFornecimento()">
                         Anual
                     </label><br>
-                    </div>
-                    <div id="chart_div_fornecimento_historico" style="width: 100%; height: 400px;"></div>
-                    </div>       
-                    </div>
-                    <br>
-                    <div class="conteudo">
-                    <div class="barras-de-medicoes-na">
-                        <div style="width: 100%; display: flex;"">
-                            <div id="chart_div_fornecimento_agrupado" style="width: 50%; height: 400px;"></div>
-                            <div id="chart_div_fornecimento_variacao" style="width: 50%; height: 400px;"></div>
-                        </div>
-                    </div>
-                    </div>    
+                </div>
+                <div id="chart_div_fornecimento_historico" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
+        <br>
+        <div class="conteudo">
+            <div class="barras-de-medicoes-na">
+                <div style="width: 100%; display: flex;"">
+                            <div id=" chart_div_dic" style="width: 50%; height: 400px;"></div>
+                <div id="chart_div_fic" style="width: 50%; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
 
-                    </section>
-
+</section>
