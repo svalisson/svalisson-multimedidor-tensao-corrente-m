@@ -109,41 +109,20 @@
 
                                         
                         function updateGraphsTensao() {
-                            let datePickerInputTensao = document.getElementById('datePickerInputTensao');
-                            let dateStr = datePickerInputTensao.value;
-                            const dates = dateStr.split(" to ");
-                            let dateRangeValid = true;
-                            let datesTuple;
+                        const getDateAsIsoFormat = (dateString) => {
+                        const [day, month, year] = dateString.split('/');
+                        return `${year}-${month}-${day}`;
+                        };
 
-                            if (dates.length === 1) {
-                                console.log(dates[0]);
-                                datesTuple = [dates[0], dates[0]]
-                            } else if (dates.length === 2) {
-                                console.log(`${dates[0]} até ${dates[1]}`);
-                                datesTuple = [dates[0], dates[1]]
-                            }
+                        let datePickerInputTensao = document.getElementById('datePickerInputTensao');
+                        let dateRangeString = datePickerInputTensao.value;
+                        let dateStrings = dateRangeString.split(' até ');
 
-                            const convertedDates = [];
+                        if (dateStrings.length === 1) {
+                        dateStrings.push(dateStrings[0]);
+                        }
 
-                            for (const date of datesTuple) {
-                                const [day, month, year] = date.split('/');
-                                const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-                                convertedDates.push(formattedDate);
-                            }
-
-                            // Valida as datas no formato ANO-MÊS-DIA (por exemplo, '2023-03-31')
-                            const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-                            convertedDates.forEach(date => {
-                                if (!datePattern.test(date.trim())) {
-                                    dateRangeValid = false;
-                                }
-                            });
-
-                            if (!dateRangeValid) {
-                                console.log(convertedDates)
-                                console.error("Formato de data inválido. Use o formato ANO-MÊS-DIA (por exemplo, '2023-03-31').");
-                                return;
-                            }
+                        let convertedDates = dateStrings.map(getDateAsIsoFormat);
 
                             // Obter o valor do grupo Histórico
                             let historicoRadioButtons = document.getElementsByName('historico_tensao');
