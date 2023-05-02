@@ -255,8 +255,9 @@ app.get('/medida', async (req, res, next) => {
 // ROUND( CAST( (((sum(cast(potencia as float8) * cast(intervalo as integer)))/3600)/1000 ) AS numeric ),3) as base
 // from medida where date(created_at) >= '${dateinicio}' and  date(created_at) <= '${datefim}'  `
 
-  const sql = `  
-  select ca.base , round(cast(ca.base * ${valor} as numeric),2) as total 
+  const sql = `
+  select ca.base , round(cast(ca.base * ${valor} as numeric),2) as total,
+  FLOOR(dic / 60) || ' Horas e ' || ROUND((dic % 60)::numeric) || ' Minutos' as dic, dif_fic.fic as fic
   from (
   select 
 
@@ -272,7 +273,13 @@ app.get('/medida', async (req, res, next) => {
      where  date(mp.created_at) = date('${dateinicio}')
     order by mp.created_at asc 
     limit 1)  AS numeric)),2)  as base
-) as ca`
+) as ca
+cross join
+(
+select sum(dic_minutos) as dic , sum(fic) as fic  from dic_fic_por_dia 
+where data between date('${dateinicio}') and date('${datefim}')
+) dif_fic
+ `
   const start = await client.query(sql)
   console.log(sql)
  // console.log(start.rows)
