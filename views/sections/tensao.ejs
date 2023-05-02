@@ -1,22 +1,12 @@
-<style>
-    .barras-de-medicoes-na {
-      display: flex;
-      flex-direction: column;
-    }
-  
-    .chart-container {
-      display: flex;
-    }
-  </style>
-  
-  <section class="tensao" id="tensao">
+<section class="tensao" id="tensao">
     <div class="subtitulo">
-      <h1>Analise da Tensão</h1>
+        <h1>Analise da Tensão</h1>
     </div>
-  
+
     <div class="conteudo">
-      <div class="barras-de-medicoes-na">
-        <div>
+        <div class="barras-de-medicoes-na">
+            <div style="display: inline-block;">
+                <div>
                     <label>Data:</label><br>
                     <input type="text" id="datePickerInputTensao" style="width: 200px; display: inline-block;" placeholder="Escolha uma data">
                         <div id="datePickerOptionsTensao" style="color: black; display: none;">
@@ -285,10 +275,12 @@
                     </label><br>
                 </div>
                 <div id="chart_div_tensao_historico" style="width: 100%; height: 400px;"></div>
-                <div class="chart-container">
-                  <div id="chart_div_tensao_agrupado" style="width: 50%; height: 400px;"></div>
-                  <div id="chart_div_tensao_variacao" style="width: 50%; height: 400px;"></div>
-                </div>
-              </div>
             </div>
-          </section>
+    
+            <!-- Nova div fora do elemento com display: inline-block; -->
+            <div style="width: 100%;">
+                <div id="chart_div_tensao_agrupado" style="width: 50%; height: 400px; display: inline-block;"></div>
+                <div id="chart_div_tensao_variacao" style="width: 50%; height: 400px; display: inline-block;"></div>
+            </div>
+        </div>
+    </section>
