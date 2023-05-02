@@ -114,25 +114,9 @@
                             const dates = dateStr.split(" to ");
                             let dateRangeValid = true;
 
-                            if (dates.length === 1) {
-                                console.log(dates[0]);
-                                const datesTuple = [dates[0],dates[0]]
-                            } else if (dates.length === 2) {
-                                console.log(`${dates[0]} até ${dates[1]}`);
-                                const datesTuple = [dates[0],dates[1]]
-                            }
-
-                            const convertedDates = [];
-
-                            for (const date of datesTuple) {
-                            const [day, month, year] = date.split('/');
-                            const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-                            convertedDates.push(formattedDate);
-                            }
-                            
                             // Valida as datas no formato ANO-MÊS-DIA (por exemplo, '2023-03-31')
                             const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-                            convertedDates.forEach(date => {
+                            dates.forEach(date => {
                                 if (!datePattern.test(date.trim())) {
                                 dateRangeValid = false;
                                 }
@@ -142,6 +126,14 @@
                                 console.log(dates)
                                 console.error("Formato de data inválido. Use o formato ANO-MÊS-DIA (por exemplo, '2023-03-31').");
                                 return;
+                            }
+                            
+                            if (dates.length === 1) {
+                                console.log(dates[0]);
+                                const datesTuple = [dates[0],dates[0]]
+                            } else if (dates.length === 2) {
+                                console.log(`${dates[0]} até ${dates[1]}`);
+                                const datesTuple = [dates[0],dates[1]]
                             }
                             
 
@@ -186,7 +178,7 @@
                             }
 
                             // Chama getDataFromServer e atualiza o gráfico historico com os dados recebidos
-                            getDataFromServer(convertedDates[0], convertedDates[1], 'tensao', historicoDiscretizacao)
+                            getDataFromServer(datesTuple[0], datesTuple[1], 'tensao', historicoDiscretizacao)
                             .then(dataList => {
                                 drawGenericChart(
                                 "chart_div_tensao_historico",
@@ -203,7 +195,7 @@
                             });
 
                             // Chama getDataFromServer e atualiza o gráfico historico com os dados recebidos
-                            getDataFromServer(convertedDates[0], convertedDates[1], 'tensao', agrupadoDiscretizacao)
+                            getDataFromServer(datesTuple[0], datesTuple[1], 'tensao', agrupadoDiscretizacao)
                             .then(dataList => {
                                 drawGenericChart(
                                 "chart_div_tensao_agrupado",
@@ -220,7 +212,7 @@
                             });
 
                             // Chama getDataFromServer e atualiza o gráfico historico com os dados recebidos
-                            getDataFromServer(convertedDates[0], convertedDates[1], 'desvio_padrão_tensao', agrupadoDiscretizacao)
+                            getDataFromServer(datesTuple[0], datesTuple[1], 'desvio_padrão_tensao', agrupadoDiscretizacao)
                             .then(dataList => {
                                 drawGenericChart(
                                 "chart_div_tensao_variacao",
