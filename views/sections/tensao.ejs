@@ -186,7 +186,7 @@
                             .then(dataList => {
                                 drawGenericChart(
                                 "chart_div_tensao_agrupado",
-                                "BarChart",
+                                "ComboChart",
                                 "Tensão",
                                 "Data",
                                 "Tensão",
@@ -203,7 +203,7 @@
                             .then(dataList => {
                                 drawGenericChart(
                                 "chart_div_tensao_variacao",
-                                "BarChart",
+                                "ComboChart",
                                 "Flutuação da tensão",
                                 "Data",
                                 "Flutuação",
@@ -276,13 +276,11 @@
                 </div>
 
                 <div id="chart_div_tensao_historico" style="width: 100%; height: 400px;"></div> 
-                
-
-
-            </div>
-            <div  style="display: inline-block;"">
+                <br>
                 <div id="chart_div_tensao_agrupado" style="width: 100%; height: 400px;"></div>
                 <div id="chart_div_tensao_variacao" style="width: 100%; height: 400px;"></div>
+
+
             </div>
 
         </div>
