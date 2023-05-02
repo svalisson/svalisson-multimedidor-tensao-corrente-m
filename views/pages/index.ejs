@@ -198,7 +198,15 @@
     });
   </script>
 
+<<<<<<< HEAD
 
+=======
+<style>
+    #datePickerOptions {
+        display: none;
+    }
+</style>
+>>>>>>> parent of 36d2569 (run datepicker)
 
 </head>
 
@@ -327,11 +335,126 @@
     </div>
    
     <div class="conteudo">
+<<<<<<< HEAD
        <div class="barras-de-medicoes-na">
         <div>
             <span>
                 Data :
             </span>
+=======
+        <div class="barras-de-medicoes-na">
+            <div>
+                <span>
+                    Data :
+                </span>
+
+                <!-- Encapsule o date picker em um container -->
+                <div class="datePickerContainer" style="display: inline-block; position: relative;">
+                    <input type="text" id="datePickerInput" placeholder="Escolha uma data">
+                    <div id="datePickerOptions">
+                        <label><input type="radio" name="period" value="day"> Dia</label>
+                        <label><input type="radio" name="period" value="week"> Semana</label>
+                        <label><input type="radio" name="period" value="month"> Mês</label>
+                        <label><input type="radio" name="period" value="semester"> Semestre</label>
+                        <label><input type="radio" name="period" value="year"> Ano</label>
+                        <br>
+                        <label><input type="radio" name="time" value="current" checked> Atual</label>
+                        <label><input type="radio" name="time" value="past"> Passado</label>
+                    </div>
+                </div>
+
+                <script>
+                    const datePickerInput = document.getElementById("datePickerInput");
+                    const datePickerOptions = document.getElementById("datePickerOptions");
+            
+                    const flatpickrInstance = flatpickr(datePickerInput, {
+                        mode: "range",
+                        maxDate: "tomorrow",
+                        dateFormat: "d/m/Y",
+                        locale: "pt",
+                        firstDayOfWeek: 0,
+                        onClose: function (selectedDates, dateStr) {
+                            updateLabel(dateStr);
+                        },
+                        onOpen: function () {
+                            const fp = this;
+                            if (!fp.calendarContainer.contains(datePickerOptions)) {
+                                fp.calendarContainer.appendChild(datePickerOptions);
+                            }
+                            datePickerOptions.style.display = 'block';
+                        }
+                    });
+            
+                    datePickerOptions.addEventListener("change", function (event) {
+                        if (event.target.name === "period" || event.target.name === "time") {
+                            flatpickrInstance.close();
+                            updateDatePicker(flatpickrInstance);
+                            flatpickrInstance.open();
+                        }
+                    });
+            
+                    // Restante do código
+            
+                    function updateDatePicker(fp) {
+                        const period = document.querySelector('input[name="period"]:checked').value;
+                        const time = document.querySelector('input[name="time"]:checked').value;
+                        const today = new Date();
+                        let startDate = new Date(today);
+                        let endDate = new Date(today);
+            
+                        if (period === "day") {
+                            if (time === "past") {
+                                startDate.setDate(startDate.getDate() - 1);
+                                endDate.setDate(endDate.getDate() - 1);
+                            }
+                        } else if (period === "week") {
+                            if (time === "current") {
+                                startDate.setDate(startDate.getDate() - (startDate.getDay() - 1));
+                            } else {
+                                startDate.setDate(startDate.getDate() - (startDate.getDay() + 6));
+                                endDate.setDate(startDate.getDate() + 6);
+                            }
+                            
+                        } else if (period === "month") {
+                            if (time === "past") {
+                                startDate.setMonth(startDate.getMonth() - 1);
+                                endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+                            }
+                            startDate.setDate(1);
+                            
+                        } else if (period === "semester") {
+                            if (time === "past") {
+                                startDate.setMonth(startDate.getMonth() - 6);
+                                endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 6, 0);
+                            }
+                            startDate.setMonth(Math.floor(startDate.getMonth() / 6) * 6);
+                            startDate.setDate(1);
+                        } else if (period === "year") {
+                            if (time === "past") {
+                                startDate.setFullYear(startDate.getFullYear() - 1);
+                                endDate = new Date(startDate.getFullYear() + 1, 0, 0);
+                            }
+                            startDate.setMonth(0);
+                            startDate.setDate(1); 
+                        }
+            
+                        fp.setDate([startDate, endDate]);
+                    }
+            
+                    function updateLabel(dateStr) {
+                        const dates = dateStr.split(" to ");
+                        if (dates.length === 1) {
+                            datePickerLabel.textContent = dates[0];
+                        } else if (dates.length === 2) {
+                            datePickerLabel.textContent = `${dates[0]} até ${dates[1]}`;
+                        }
+                    }
+            
+                    datePickerLabel.addEventListener("click", function () {
+                        flatpickrInstance.open();
+                    });
+                </script>
+>>>>>>> parent of 36d2569 (run datepicker)
 
             <input type="text" id="datePickerInput" placeholder="Escolha uma data">
             <div id="datePickerOptions">
