@@ -186,10 +186,7 @@
          });
      });
 
-  
   function drawGenericChart(elementId, chartType, title, hAxisTitle, vAxisTitle, rows, extraSeries) {
-  console.log(elementId, chartType, title, hAxisTitle, vAxisTitle, rows, extraSeries);
-  
   const data = [];
   const header = [hAxisTitle, vAxisTitle];
 
@@ -214,7 +211,9 @@
       data.push(temp);
     }
   }
+
   const dataTable = google.visualization.arrayToDataTable(data);
+
   const options = {
     title,
     hAxis: { title: hAxisTitle, titleTextStyle: { color: "#333" } },
