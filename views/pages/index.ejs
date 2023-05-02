@@ -6,11 +6,27 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>  
+    
   <script type="text/javascript"> 
    // --------------- --------------- --------------- --------------- ---------------
+
+        // Menu responsivo: Teste
+        // let menu = document.querySelector('#icone-menu');
+        // let navbar = document.querySelector('.barra-de-navegacao');
+
+        // menu.onclick = () => {
+        //     menu.classList.toggle('fa-times');
+        //     navbar.classList.toggle('active');
+        // }
+
+        // window.onscroll = () => {
+        //     // Menu:
+        //     menu.classList.remove('fa-times');
+        //     navbar.classList.remove('active');
+
+        //     // Botão voltar ao topo:
+        //     scrollFunction();
+        // }
    
     // Inicialização do Firebase:
     firebase.initializeApp( {
@@ -22,73 +38,56 @@
         messagingSenderId: "942023989243",
         appId: "1:942023989243:web:723fac40e3f41065605d5e"
     });
-    
-	const { Pool } = require('pg');
-	const pool = new Pool({
-	  user: 'rnzsitjoavxdsi',
-	  host: 'ec2-44-194-4-127.compute-1.amazonaws.com',
-	  database: 'dbgdiqt270ssd7',
-	  password: '082ca4bc3721a64672e28b8adc3375238d3b92b9295dd4faaf484e8901eed9ab',
-	  port: 5432,
-	  ssl: {
-		rejectUnauthorized: false
+    var database = firebase.database();
+	var kwhRef = database.ref('controle/kwh');
+	var emailControleRef = database.ref('controle/email');
+	var phoneControleRef = database.ref('controle/telefone');
+	
+	// Função para atualizar os valores dos campos de controle
+	function attValoresControle() {
+		// Busca o valor da variável kwh no banco de dados do Firebase
+		kwhRef.once('value').then(function(snapshot) {
+		  var valorKwh = snapshot.val();
+		  console.log('Valor de kwh:', valorKwh);
+		  // atualize o campo de entrada com o valor obtido
+		  document.getElementById('controlevalorKwh').value = valorKwh;
+		});
+
+		// Busca o valor da variável email no banco de dados do Firebase
+		emailControleRef.once('value').then(function(snapshot) {
+		  var valorEmail = snapshot.val();
+		  console.log('Valor de email:', valorEmail);
+		  // atualize o campo de entrada com o valor obtido
+		  document.getElementById('emailControle').value = valorEmail;
+		});
+
+		// Busca o valor da variável telefone no banco de dados do Firebase
+		phoneControleRef.once('value').then(function(snapshot) {
+		  var valorTelefone = snapshot.val();
+		  console.log('Valor de telefone:', valorTelefone);
+		  // atualize o campo de entrada com o valor obtido
+		  document.getElementById('phoneControle').value = valorTelefone;
+		});
 	  }
-	});
-	
-	//buscar valor no postgress
-	async function buscarUltimoAlerta() {
-	  const query = 'SELECT email, phone, consumo_mes FROM public.alerta ORDER BY set_date DESC LIMIT 1';
-	  try {
-		const res = await pool.query(query);
-		console.log('Dados buscados com sucesso:', res.rows);
-		return res.rows[0];
-	  } catch (err) {
-		console.error('Erro ao buscar os dados:', err);
-		return null;
-	  }
-	}
-	
-	async function attValoresControle() {
-	  const ultimoAlerta = await buscarUltimoAlerta();
-	  if (ultimoAlerta) {
-		// atualize os campos de entrada com os valores obtidos
-		document.getElementById('controlevalorKwh').value = ultimoAlerta.consumo_mes;
-		document.getElementById('emailControle').value = ultimoAlerta.email;
-		document.getElementById('phoneControle').value = ultimoAlerta.phone;
-	  }
-	}
 	
 	
-	// Função para enviar o valor para o postgree
+	// Função para enviar o valor para o Firebase
 	function enviarValorControle() {
 		var valorControle = document.getElementById('controlevalorKwh').value;
 		var emailControle = document.getElementById('emailControle').value;
 		var phoneControle = document.getElementById('phoneControle').value;
 		
 		if (isNaN(valorControle)) {
-			alert('O valor informado para o alerta de consumo não é válido');
+		  alert('O valor informado para o alerta de consumo não é válido');
 		} else {
-			  var valorControle = document.getElementById('controlevalorKwh').value;
-			  var emailControle = document.getElementById('emailControle').value;
-			  var phoneControle = document.getElementById('phoneControle').value;
-			  inserirDados(emailControle, phoneControle, valorControle);
-			  alert("Alerta configurado em " + valor + "Kwh");
+		  kwhRef.set(parseFloat(valorControle));
+		  emailControleRef.set(emailControle);
+		  phoneControleRef.set(phoneControle);
+		  
+		  alert("Alerta configurado em " + valor + "Kwh");
 		}
 	  }
 	
-
-	async function inserirDados(email, phone, consumo_mes) {
-	  const query = 'INSERT INTO public.alerta (email, phone, consumo_mes, set_date) VALUES ($1, $2, $3, NOW())';
-	  const values = [email, phone, consumo_mes];
-	  try {
-		const res = await pool.query(query, values);
-		console.log('Dados inseridos com sucesso:', res.rowCount);
-	  } catch (err) {
-		console.error('Erro ao inserir os dados:', err);
-	  }
-	}
-
-
 	  
     function atualizarGrafico(value){
         $( "#chart_div" ).load( "/profile?date="+value+"");
@@ -97,7 +96,6 @@
     function atualizarGraficoMes(value){
         $( "#chart_div" ).load( "/mes?date="+value+"");
     }
-
    function enviarCalculo(){
 
         if($("#datainicio").val() == ''){
@@ -183,6 +181,7 @@
                 fatordepotencia =  dataSplit[6].split(":");  
             }
 
+        
             if(dataSplit[7]){
             ativo =  dataSplit[7].split(":");  
         }
@@ -196,6 +195,7 @@
             
         });
     });
+  
   </script>
 
 
@@ -327,222 +327,34 @@
     </div>
    
     <div class="conteudo">
-        <div class="barras-de-medicoes-na">
-            <div>
-                <span>
-                    Data :
-                </span>
+       <div class="barras-de-medicoes-na">
+        <div>
+            <span>
+                Data :
+            </span>
 
-                <!-- Encapsule o date picker em um container -->
-                <div class="datePickerContainer" style="display: inline-block; position: relative;">
-                    <input type="text" id="datePickerInput" placeholder="Escolha uma data">
-                    <div id="datePickerOptions">
-                        <label><input type="radio" name="period" value="day"> Dia</label>
-                        <label><input type="radio" name="period" value="week"> Semana</label>
-                        <label><input type="radio" name="period" value="month"> Mês</label>
-                        <label><input type="radio" name="period" value="semester"> Semestre</label>
-                        <label><input type="radio" name="period" value="year"> Ano</label>
-                        <br>
-                        <label><input type="radio" name="time" value="current" checked> Atual</label>
-                        <label><input type="radio" name="time" value="past"> Passado</label>
-                    </div>
-                </div>
+            <select name="dia" onchange="javascript:atualizarGrafico(this.value)" >
+           
+                <% for (var i =0; i < data_current.length;  i++ ) { %>
+                    <option value=<%= data_current[i].datas.toISOString() %>   <%= data_current[i].datas.toISOString()  === data_current[i].hoje.toISOString()  ? 'selected' : '' %> >
+                        <%= data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , day: "2-digit"}) +"/"+data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , month: "2-digit"})+"/"+data_current[i].datas.toLocaleString("pt-br", {timeZone: "America/Sao_Paulo" , year: "numeric" })%>
+                    </option>
+                <% } %>
+            </select>
 
-                <script>
-                    const datePickerInput = document.getElementById("datePickerInput");
-                    const datePickerOptions = document.getElementById("datePickerOptions");
-            
-                    const flatpickrInstance = flatpickr(datePickerInput, {
-                        mode: "range",
-                        maxDate: "tomorrow",
-                        dateFormat: "d/m/Y",
-                        locale: "pt",
-                        firstDayOfWeek: 0,
-                        onClose: function (selectedDates, dateStr) {
-                            updateLabel(dateStr);
-                        },
-                        onOpen: function () {
-                            const fp = this;
-                            if (!fp.calendarContainer.contains(datePickerOptions)) {
-                                fp.calendarContainer.appendChild(datePickerOptions);
-                            }
-                            datePickerOptions.style.display = 'block';
-                        }
-                    });
-            
-                    datePickerOptions.addEventListener("change", function (event) {
-                        if (event.target.name === "period" || event.target.name === "time") {
-                            flatpickrInstance.close();
-                            updateDatePicker(flatpickrInstance);
-                            flatpickrInstance.open();
-                        }
-                    });
-            
-                    // Restante do código
-            
-                    function updateDatePicker(fp) {
-                        const period = document.querySelector('input[name="period"]:checked').value;
-                        const time = document.querySelector('input[name="time"]:checked').value;
-                        const today = new Date();
-                        let startDate = new Date(today);
-                        let endDate = new Date(today);
-            
-                        if (period === "day") {
-                            if (time === "past") {
-                                startDate.setDate(startDate.getDate() - 1);
-                                endDate.setDate(endDate.getDate() - 1);
-                            }
-                        } else if (period === "week") {
-                            if (time === "current") {
-                                startDate.setDate(startDate.getDate() - (startDate.getDay() - 1));
-                            } else {
-                                startDate.setDate(startDate.getDate() - (startDate.getDay() + 6));
-                                endDate.setDate(startDate.getDate() + 6);
-                            }
-                            
-                        } else if (period === "month") {
-                            if (time === "past") {
-                                startDate.setMonth(startDate.getMonth() - 1);
-                                endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
-                            }
-                            startDate.setDate(1);
-                            
-                        } else if (period === "semester") {
-                            if (time === "past") {
-                                startDate.setMonth(startDate.getMonth() - 6);
-                                endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 6, 0);
-                            }
-                            startDate.setMonth(Math.floor(startDate.getMonth() / 6) * 6);
-                            startDate.setDate(1);
-                        } else if (period === "year") {
-                            if (time === "past") {
-                                startDate.setFullYear(startDate.getFullYear() - 1);
-                                endDate = new Date(startDate.getFullYear() + 1, 0, 0);
-                            }
-                            startDate.setMonth(0);
-                            startDate.setDate(1); 
-                        }
-            
-                        fp.setDate([startDate, endDate]);
-                    }
-            
-                    function updateLabel(dateStr) {
-                        const dates = dateStr.split(" to ");
-                        if (dates.length === 1) {
-                            datePickerLabel.textContent = dates[0];
-                        } else if (dates.length === 2) {
-                            datePickerLabel.textContent = `${dates[0]} até ${dates[1]}`;
-                        }
-                    }
-            
-                    datePickerLabel.addEventListener("click", function () {
-                        flatpickrInstance.open();
-                    });
-                </script>
->>>>>>> parent of 36d2569 (run datepicker)
-
-            <input type="text" id="datePickerInput" placeholder="Escolha uma data">
-            <div id="datePickerOptions">
-                <label><input type="radio" name="period" value="day"> Dia</label>
-                <label><input type="radio" name="period" value="week"> Semana</label>
-                <label><input type="radio" name="period" value="month"> Mês</label>
-                <label><input type="radio" name="period" value="semester"> Semestre</label>
-                <label><input type="radio" name="period" value="year"> Ano</label>
-                <br>
-                <label><input type="radio" name="time" value="current" checked> Atual</label>
-                <label><input type="radio" name="time" value="past"> Passado</label>
-            </div>
-            <script>
-                const datePickerInput = document.getElementById("datePickerInput");
-                const datePickerOptions = document.getElementById("datePickerOptions");
-        
-                const flatpickrInstance = flatpickr(datePickerInput, {
-                    mode: "range",
-                    dateFormat: "d/m/Y",
-                    locale: "pt",
-                    firstDayOfWeek: 0,
-                    onClose: function (selectedDates, dateStr) {
-                        updateLabel(dateStr);
-                    },
-                    onOpen: function () {
-                        const fp = this;
-                        if (!fp.calendarContainer.contains(datePickerOptions)) {
-                            fp.calendarContainer.appendChild(datePickerOptions);
-                        }
-                        datePickerOptions.style.display = 'block';
-                    }
-                });
-        
-                datePickerOptions.addEventListener("change", function (event) {
-                    if (event.target.name === "period" || event.target.name === "time") {
-                        flatpickrInstance.close();
-                        updateDatePicker(flatpickrInstance);
-                        flatpickrInstance.open();
-                    }
-                });
-        
-                // Restante do código
-        
-                function updateDatePicker(fp) {
-                    const period = document.querySelector('input[name="period"]:checked').value;
-                    const time = document.querySelector('input[name="time"]:checked').value;
-                    const today = new Date();
-                    let startDate = new Date(today);
-                    let endDate = new Date(today);
-        
-                    if (period === "day") {
-                        if (time === "past") {
-                            startDate.setDate(startDate.getDate() - 1);
-                            endDate.setDate(endDate.getDate() - 1);
-                        }
-                    } else if (period === "week") {
-                        if (time === "current") {
-                            startDate.setDate(startDate.getDate() - (startDate.getDay() - 1));
-                        } else {
-                            startDate.setDate(startDate.getDate() - (startDate.getDay() + 6));
-                            endDate.setDate(startDate.getDate() + 6);
-                        }
-                        
-                    } else if (period === "month") {
-                        if (time === "past") {
-                            startDate.setMonth(startDate.getMonth() - 1);
-                            endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
-                        }
-                        startDate.setDate(1);
-                        
-                    } else if (period === "semester") {
-                        if (time === "past") {
-                            startDate.setMonth(startDate.getMonth() - 6);
-                            endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 6, 0);
-                        }
-                        startDate.setMonth(Math.floor(startDate.getMonth() / 6) * 6);
-                        startDate.setDate(1);
-                    } else if (period === "year") {
-                        if (time === "past") {
-                            startDate.setFullYear(startDate.getFullYear() - 1);
-                            endDate = new Date(startDate.getFullYear() + 1, 0, 0);
-                        }
-                        startDate.setMonth(0);
-                        startDate.setDate(1); 
-                    }
-        
-                    fp.setDate([startDate, endDate]);
-                }
-        
-                function updateLabel(dateStr) {
-                    const dates = dateStr.split(" to ");
-                    if (dates.length === 1) {
-                        datePickerLabel.textContent = dates[0];
-                    } else if (dates.length === 2) {
-                        datePickerLabel.textContent = `${dates[0]} até ${dates[1]}`;
-                    }
-                }
-        
-                datePickerLabel.addEventListener("click", function () {
-                    flatpickrInstance.open();
-                });
-            </script>
-
+            <span>
+                Mês : &nbsp;
+            </span>
+            <select name="dia" onchange="javascript:atualizarGraficoMes(this.value)" >
+                <option value='-1'   >
+                   Selecione
+                </option>
+                <% for (var i =0; i <= mesa.length;  i++ ) { %>,
+                    <option value=<%= i %>   >
+                        <%= mesa[i]%>
+                    </option>
+                <% } %>
+            </select>
            <br>
 		   <label for="tipo_grafico">Tipo:</label><br>
 			<input type="radio" id="consumo" name="tipo_grafico" value="consumo" checked>
@@ -666,4 +478,3 @@
 
 </body>
 </html>
-
