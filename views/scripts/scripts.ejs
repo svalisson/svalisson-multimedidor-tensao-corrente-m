@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
 
-
+  
   <script type="text/javascript">
     // --------------- --------------- --------------- --------------- ---------------
     
@@ -199,17 +199,7 @@
              
          });
      });
-  
-  // Carregar a biblioteca do Google Charts
-  google.charts.load("current", { packages: ["corechart", "line"] });
 
-  // Definir um callback para executar quando a biblioteca estiver carregada
-  google.charts.setOnLoadCallback(initialize);
-
-  function initialize() {
-    // Nada precisa ser feito aqui, já que você chama drawGenericChart
-    // quando clica em um botão na sua página
-  }
   
   function drawGenericChart(elementId, chartType, title, hAxisTitle, vAxisTitle, rows, extraSeries) {
   console.log(elementId, chartType, title, hAxisTitle, vAxisTitle, rows, extraSeries);
