@@ -473,44 +473,6 @@ ORDER BY dados.mes, dados.dia;
   resPontencia = await client.query(sql)
   res.render('pages/grafico_mes', { dado: resPontencia.rows});
 })
-
-app.get('/getdata', async (req, res, next) => {
-  // Extrai os parâmetros da consulta
-  const { data_inicial, data_final, grandeza, discretizacao } = req.query;
-
-  // Conecta-se ao banco de dados usando a função connectarClient e a configuração config
-  const client = await connectarClient(config);
-
-  // Define a consulta SQL para chamar a função get_data
-  const sql = `SELECT * FROM get_data('${data_inicial}', '${data_final}', '${grandeza}', '${discretizacao}');`;
-
-  // Executa a consulta SQL e armazena os resultados na variável resData
-  const resData = await client.query(sql);
-
-  // Retorna a resposta como JSON
-  res.json(resData.rows[0].dados); // Substitua 'jsonb_column_name' pelo nome da coluna JSONB retornada pela função get_data
-});
-
-
-app.get('/gettotais', async (req, res, next) => {
-  // Extrai os parâmetros da consulta
-  const { data_inicial, data_final} = req.query;
-
-  // Conecta-se ao banco de dados usando a função connectarClient e a configuração config
-  const client = await connectarClient(config);
-
-  // Define a consulta SQL para chamar a função get_data
-  const sql = `SELECT * FROM get_totais('${data_inicial}', '${data_final}');`;
-
-  // Executa a consulta SQL e armazena os resultados na variável resData
-  const resData = await client.query(sql);
-
-  // Retorna a resposta como JSON
-  res.json(resData.rows[0].get_totais); // Substitua 'jsonb_column_name' pelo nome da coluna JSONB retornada pela função get_data
-});
-
-
-
 server.listen(PORT, () => {
   console.log(`listening on *: ${ PORT }`);
 });
