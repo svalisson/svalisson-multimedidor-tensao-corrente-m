@@ -96,25 +96,48 @@
     function atualizarGraficoMes(value){
         $( "#chart_div" ).load( "/mes?date="+value+"");
     }
-   function enviarCalculo(){
+    function enviarCalculo() {
+  if ($("#datainicio").val() == "") {
+    alert("Digita a data início, por favor");
+    $("#datainicio").focus();
+  } else if ($("#datafim").val() == "") {
+    alert("Digita a data fim, por favor");
+    $("#datafim").focus();
+  } else if ($("#valor").val() == "") {
+    alert("Digita o valor, por favor");
+    $("#valor").focus();
+  } else {
+    var url =
+      "/medida?datainicio=" +
+      $("#datainicio").val() +
+      "&datafim=" +
+      $("#datafim").val() +
+      "&valor=" +
+      +$("#valor")
+        .val()
+        .replace(".", "")
+        .replace(",", ".")
+        .replace("R$", "") +
+      "";
 
-        if($("#datainicio").val() == ''){
-            alert("Digita a data início, por favor")
-            $("#datainicio").focus()
-        } else  if($("#datafim").val() == ''){
-            alert("Digita a data fim, por favor")
-            $("#datafim").focus()
-        }  else  if($("#valor").val() == ''){
-            alert("Digita o valor, por favor")
-            $("#valor").focus()
-        }else{
-        
-            var url = "/medida?datainicio="+$("#datainicio").val()+"&datafim="+$("#datafim").val()+"&valor="+ (+$("#valor").val().replace('.', '').replace(',', '.').replace('R$', ''))+"";
-        
-            $( "#medida_data" ).load(url);
+    $.ajax({
+      url: url,
+      type: "GET",
+      timeout: 120000, // Timeout de 2 minutos em milissegundos
+      success: function (data) {
+        $("#medida_data").html(data);
+      },
+      error: function (xhr, status, error) {
+        if (status === "timeout") {
+          alert("A requisição demorou muito tempo. Tente novamente.");
+        } else {
+          alert("Ocorreu um erro ao processar a requisição.");
         }
-       
-    }
+      },
+    });
+  }
+}
+
     var dia_atual =  new Date().toISOString();
     $(document).ready(function () { 
 

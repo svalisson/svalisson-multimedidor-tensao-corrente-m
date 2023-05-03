@@ -112,10 +112,10 @@ getDatabase.onValue(starCountRef, async (snapshot) => {
   const client = await connectarClient(config)
   const res = await client.query('SELECT id, "created_at" FROM medida order by id desc limit 1');
 
-let date1 = new Date();
-if(res?.rowCount > 0){
-  date1 = new Date(res.rows[0].created_at);
-} 
+  let date1 = new Date();
+  if(res?.rowCount > 0){
+    date1 = new Date(res.rows[0].created_at);
+  } 
  
  const date2 = new Date();
  const timeDiff = Math.abs(date2.getTime() - date1.getTime());
