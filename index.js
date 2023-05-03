@@ -257,7 +257,7 @@ app.get('/medida', async (req, res, next) => {
 
   const sql = `
   select ca.base , round(cast(ca.base * ${valor} as numeric),2) as total,
-  FLOOR(dic / 60) || 'h e ' || ROUND((dic % 60)::numeric) || ' min' as dic, dif_fic.fic as fic
+  FLOOR(dic / 60) || 'h e ' || ROUND((dic % 60)::numeric) || 'min' as dic, dif_fic.fic as fic
   from (
   select 
 
