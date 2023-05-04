@@ -261,17 +261,17 @@ app.get('/medida', async (req, res, next) => {
   from (
   select 
 
-  ROUND((CAST((select me.energia
-  from medida me
-   where  date(me.created_at) = date('${datefim}')
-  order by me.created_at desc
+  ROUND((CAST((select me.energia_acumulada 
+  from consumo_tensao_por_dia me
+   where  date(me."data") = date('${datefim}')
+  order by me."data" desc
   limit 1) AS numeric)
     -
   CAST((select 
-    mp.energia
-    from medida mp
-     where  date(mp.created_at) = date('${dateinicio}')
-    order by mp.created_at asc 
+    mp.energia_acumulada
+    from consumo_tensao_por_dia mp
+     where  date(mp."data") = date('${dateinicio}')
+    order by mp."data" asc 
     limit 1)  AS numeric)),2)  as base
 ) as ca
 cross join
